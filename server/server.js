@@ -20,6 +20,9 @@ const __dirname = path.dirname(__filename);
 // Initialize Express App
 const app = express();
 
+// Trust proxy - required for Vercel & reverse proxies (fixes express-rate-limit)
+app.set('trust proxy', 1);
+
 // Connect to MongoDB
 connectDB();
 
