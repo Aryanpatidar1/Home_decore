@@ -1,0 +1,39 @@
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Attach JWT token to requests
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('aura_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response error handler
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // If token expired, clear invalid auth
+      if (localStorage.getItem('aura_token')) {
+        localStorage.removeItem('aura_token');
+        localStorage.removeItem('aura_user');
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;

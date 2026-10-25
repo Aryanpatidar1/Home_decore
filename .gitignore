@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment variables (secrets - DO NOT PUSH)
+.env
+client/.env
+server/.env
+
+# Build output
+client/dist/
+client/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+desktop.ini
+Thumbs.db
+
+# Vite cache
+client/.vite/
+
+# Uploads (user-generated content)
+server/uploads/*
+!server/uploads/.gitkeep
