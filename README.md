@@ -202,6 +202,29 @@ cd ../server
 npm start
 ```
 
+### Deploying to Vercel
+
+The frontend and API are separate Vercel projects. Configure both projects to use
+this repository and the `main` branch:
+
+1. **Frontend project**
+   - Set **Root Directory** to `client`.
+   - Use `npm run build` as the build command and `dist` as the output directory.
+   - Add `VITE_API_URL` as an environment variable. Set it to the full backend
+     URL ending in `/api`, for example `https://<your-server-domain>/api`.
+   - Redeploy after changing the environment variable; Vite embeds it at build time.
+2. **Backend project**
+   - Set **Root Directory** to `server`.
+   - Add `MONGODB_URI` and `JWT_SECRET` as environment variables. Set `CLIENT_URL`
+     to the deployed frontend URL. `GEMINI_API_KEY` is optional.
+   - Allow the backend deployment to access your MongoDB Atlas cluster.
+
+The frontend defaults to `/api` when `VITE_API_URL` is unset, which only works
+when the API is served from the same domain. Since these Vercel projects are
+separate, configure `VITE_API_URL` before deploying the frontend. Keep real
+credentials in Vercel environment settings or local `.env` files; never put them
+in `.env.example` or commit them.
+
 ---
 
 ## 6. Running Automated Tests

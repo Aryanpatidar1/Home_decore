@@ -4,6 +4,7 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { AestheticQuizModal } from '../components/AestheticQuizModal';
 import api from '../services/api';
+import { normalizeProductList } from '../utils/productHelpers';
 
 export const MainLayout = () => {
   const [quizOpen, setQuizOpen] = useState(false);
@@ -22,11 +23,10 @@ export const MainLayout = () => {
     const loadProducts = async () => {
       try {
         const res = await api.get('/products?limit=6');
-        if (res.data?.data) {
-          setProducts(res.data.data);
-        }
+        const normalized = normalizeProductList(res.data);
+        setProducts(normalized);
       } catch (e) {
-        // Fallback silently if offline
+        setProducts(normalizeProductList([]));
       }
     };
     loadProducts();

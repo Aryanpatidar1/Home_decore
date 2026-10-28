@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import api from '../services/api';
+import { buildRoomDesignReport } from '../utils/buildRoomDesignReport';
 
 export const AiDesigner = () => {
   const [objective, setObjective] = useState('');
@@ -76,7 +77,7 @@ export const AiDesigner = () => {
 
       if (res.data?.data) {
         setTimeout(() => {
-          setDiagnosticReport(res.data.data);
+          setDiagnosticReport({ ...res.data.data, source: res.data.source });
           setLoading(false);
           addToast('Spatial analysis complete!', 'success');
         }, 500);
@@ -85,7 +86,12 @@ export const AiDesigner = () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
       setLoading(false);
-      addToast(err.response?.data?.message || 'Spatial analysis failed.', 'error');
+
+      const fallback = buildRoomDesignReport(objective, roomScene);
+      setDiagnosticReport({ ...fallback, source: 'prompt_curation_fallback' });
+      setProgress(100);
+      setProgressMsg('Using local AI design logic to complete your styling brief...');
+      addToast('API not available; generated local design recommendation.', 'success');
     }
   };
 
@@ -142,6 +148,10 @@ export const AiDesigner = () => {
                 <option value="living">Lounge Living Room</option>
                 <option value="bedroom">Sanctuary Bedroom</option>
                 <option value="office">Creative Studio Office</option>
+                <option value="gaming">Gaming & Streaming Room</option>
+                <option value="cinema">Home Cinema</option>
+                <option value="reading">Reading Nook</option>
+                <option value="wellness">Home Gym / Wellness</option>
               </select>
             </div>
 
@@ -225,13 +235,18 @@ export const AiDesigner = () => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-stone-100 pb-5 gap-3">
                 <div>
                   <span className="inline-block px-3 py-1 mb-1 rounded-full bg-emerald-500/10 text-emerald-800 text-[10px] font-bold uppercase tracking-widest">
-                    Diagnostic Report Verified
+                    {diagnosticReport.source === 'gemini_ai_spatial' ? 'Gemini Design Consultation' : 'Personalized Design Consultation'}
                   </span>
-                  <h2 className="font-headline-md text-2xl text-primary font-bold">Spatial Curation Output</h2>
+                  <h2 className="font-headline-md text-2xl text-primary font-bold">
+                    {diagnosticReport.concept_title || 'Your Room Design Plan'}
+                  </h2>
+                  {diagnosticReport.concept_subtitle && (
+                    <p className="mt-1 max-w-xl text-sm text-stone-500">{diagnosticReport.concept_subtitle}</p>
+                  )}
                 </div>
                 <span className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-500/10 px-3 py-1 rounded-full">
                   <Zap className="w-3.5 h-3.5 text-amber-500" />
-                  Multi-modal Spec
+                  {diagnosticReport.source === 'gemini_ai_spatial' ? 'AI curated' : 'Prompt matched'}
                 </span>
               </div>
 
@@ -272,6 +287,49 @@ export const AiDesigner = () => {
                   </div>
                 </div>
 
+                {diagnosticReport.room_plan?.length > 0 && (
+                  <div className="md:col-span-2 p-6 rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-stone-50 space-y-4">
+                    <div>
+                      <h3 className="text-xs uppercase tracking-widest font-bold text-emerald-900">Your Room, Zone by Zone</h3>
+                      <p className="mt-1 text-xs text-stone-500">Specific layout ideas based on the room you described.</p>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {diagnosticReport.room_plan.map((zone, index) => (
+                        <div key={`${zone.title}-${index}`} className="rounded-2xl bg-white p-4 border border-stone-100 shadow-sm">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="w-6 h-6 rounded-full bg-emerald-950 text-white flex items-center justify-center text-[10px] font-bold">{index + 1}</span>
+                            <h4 className="text-xs font-bold text-stone-800">{zone.title}</h4>
+                          </div>
+                          <p className="text-xs leading-relaxed text-stone-600">{zone.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {diagnosticReport.shopping_list?.length > 0 && (
+                  <div className="md:col-span-2 p-6 rounded-3xl border border-stone-100 bg-white space-y-4">
+                    <div>
+                      <h3 className="text-xs uppercase tracking-widest font-bold text-stone-500">Curated Shopping Checklist</h3>
+                      <p className="mt-1 text-xs text-stone-500">A practical place to start—prioritized so you can build the look in stages.</p>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {diagnosticReport.shopping_list.map((item, index) => (
+                        <div key={`${item.item}-${index}`} className="flex gap-3 rounded-2xl bg-stone-50 p-4">
+                          <CheckCircle className="w-4 h-4 mt-0.5 shrink-0 text-emerald-700" />
+                          <div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h4 className="text-xs font-bold text-stone-800">{item.item}</h4>
+                              {item.priority && <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-900">{item.priority}</span>}
+                            </div>
+                            <p className="mt-1 text-xs leading-relaxed text-stone-600">{item.detail}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Right: Recommendations & Studio Link */}
                 <div className="space-y-6">
                   <div className="p-6 bg-stone-50 rounded-3xl border border-stone-100 space-y-3">
@@ -289,9 +347,9 @@ export const AiDesigner = () => {
                       <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 text-[9px] font-bold uppercase tracking-widest mb-1.5">
                         Recommended Base Piece
                       </span>
-                      <h4 className="font-bold text-base">Custom Canvas Wall Art</h4>
+                      <h4 className="font-bold text-base">Made for your brief</h4>
                       <p className="text-xs text-stone-300 mt-1 leading-relaxed">
-                        Pre-loaded with recommended moulding ({diagnosticReport.recommended_frame_style || 'oak'}) and palette ({diagnosticReport.recommended_frame_color || '#064e3b'}).
+                        {(diagnosticReport.recommended_products || ['Custom framed art', 'Warm layered lighting', 'Textured soft furnishings']).join(' · ')}
                       </p>
                     </div>
 

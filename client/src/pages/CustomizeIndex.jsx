@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Wand2, ArrowRight, Palette, Layers, Sparkles, CheckCircle2 } from 'lucide-react';
 import api from '../services/api';
+import { normalizeProductList } from '../utils/productHelpers';
 
 export const CustomizeIndex = () => {
   const [products, setProducts] = useState([]);
@@ -14,11 +15,13 @@ export const CustomizeIndex = () => {
       try {
         const url = activeCategory === 'all' ? '/products' : `/products?category=${encodeURIComponent(activeCategory)}`;
         const res = await api.get(url);
-        if (res.data?.data) {
-          setProducts(res.data.data);
-        }
+        setProducts(normalizeProductList(res.data, activeCategory === 'all'));
       } catch (err) {
-        console.error(err);
+        console.error('Failed to load customization products:', err);
+        const fallback = normalizeProductList([]);
+        setProducts(activeCategory === 'all'
+          ? fallback
+          : fallback.filter((product) => product.category === activeCategory));
       } finally {
         setLoading(false);
       }

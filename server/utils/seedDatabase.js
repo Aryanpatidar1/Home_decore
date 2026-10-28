@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
-const products = [
+export const seedProductsData = [
   // ─── Wall Decor ───────────────────────────────────────────────
   {
     name: 'Custom Canvas Wall Art',
@@ -156,63 +156,79 @@ const products = [
   }
 ];
 
-const seedDB = async () => {
-  try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/homedecor';
-    await mongoose.connect(mongoUri);
-    console.log(`[Seeder] Connected to MongoDB at: ${mongoUri}`);
+export const seedProducts = async () => {
+  for (const prod of seedProductsData) {
+    await Product.findOneAndUpdate(
+      { name: prod.name },
+      prod,
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
+  return seedProductsData.length;
+};
 
-    // Cleanly upsert products
-    for (const prod of products) {
-      await Product.findOneAndUpdate(
-        { name: prod.name },
-        prod,
-        { upsert: true, new: true, setDefaultsOnInsert: true }
-      );
-    }
-    console.log(`[Seeder] Successfully seeded ${products.length} products.`);
+export const seedUsers = async () => {
+  const adminEmail = 'admin@auradecor.com';
+  if (!(await User.findOne({ email: adminEmail }))) {
+    await User.create({
+      name: 'Aura Administrator',
+      email: adminEmail,
+      password: 'password123',
+      role: 'admin'
+    });
+    console.log(`[Seeder] Admin created: ${adminEmail} / password123`);
+  }
 
-    // Seed Demo Users (Admin and Customer)
-    const adminEmail = 'admin@auradecor.com';
-    const existingAdmin = await User.findOne({ email: adminEmail });
-    if (!existingAdmin) {
-      await User.create({
-        name: 'Aura Administrator',
-        email: adminEmail,
-        password: 'password123',
-        role: 'admin'
-      });
-      console.log(`[Seeder] Admin created: ${adminEmail} / password123`);
-    }
-
-    const demoEmail = 'user@example.com';
-    const existingDemo = await User.findOne({ email: demoEmail });
-    if (!existingDemo) {
-      await User.create({
-        name: 'Arjun Sharma',
-        email: demoEmail,
-        password: 'password123',
-        role: 'customer',
+  const demoEmail = 'user@example.com';
+  if (!(await User.findOne({ email: demoEmail }))) {
+    await User.create({
+      name: 'Arjun Sharma',
+      email: demoEmail,
+      password: 'password123',
+      role: 'customer',
+      phone: '+91 98765 43210',
+      addresses: [{
+        street: 'Flat 4B, Prestige Heights, MG Road',
+        city: 'Bengaluru',
+        state: 'Karnataka',
+        postalCode: '560001',
         phone: '+91 98765 43210',
-        addresses: [{
-          street: 'Flat 4B, Prestige Heights, MG Road',
-          city: 'Bengaluru',
-          state: 'Karnataka',
-          postalCode: '560001',
-          phone: '+91 98765 43210',
-          isDefault: true
-        }]
-      });
-      console.log(`[Seeder] Demo customer created: ${demoEmail} / password123`);
-    }
-
-    await mongoose.connection.close();
-    console.log('[Seeder] Database connection closed. Done.');
-    process.exit(0);
-  } catch (error) {
-    console.error(`[Seeder Error] ${error.message}`);
-    process.exit(1);
+        isDefault: true
+      }]
+    });
+    console.log(`[Seeder] Demo customer created: ${demoEmail} / password123`);
   }
 };
 
-seedDB();
+// Called automatically on server start: fills an empty database so the shop is never blank.
+export const seedIfEmpty = async () => {
+  const count = await Product.countDocuments({});
+  if (count === 0) {
+    const n = await seedProducts();
+    console.log(`[Seeder] Products collection was empty -> seeded ${n} products.`);
+  }
+  await seedUsers();
+};
+
+// Only run as a CLI script: `npm run seed`
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === __filename;
+if (isDirectRun) {
+  (async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/homedecor', {
+        serverSelectionTimeoutMS: 15000,
+        family: 4
+      });
+      console.log(`[Seeder] Connected to MongoDB: ${mongoose.connection.host}/${mongoose.connection.name}`);
+      const n = await seedProducts();
+      console.log(`[Seeder] Successfully seeded ${n} products.`);
+      await seedUsers();
+      await mongoose.connection.close();
+      console.log('[Seeder] Done.');
+      process.exit(0);
+    } catch (error) {
+      console.error(`[Seeder Error] ${error.message}`);
+      process.exit(1);
+    }
+  })();
+}

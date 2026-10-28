@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Lock, ShieldCheck } from 'lucide-react';
 
-export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing }) => {
+export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing, demoMode = false }) => {
   const [upiId, setUpiId] = useState('demo@razorpay');
 
   if (!isOpen) return null;
@@ -17,8 +17,10 @@ export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing
               <path d="M7.5 3L4 14.5H9.5L8 21L20 9.5H14L17.5 3H7.5Z" fill="white" />
             </svg>
             <div>
-              <p className="font-bold text-sm">Razorpay</p>
-              <p className="text-white/80 text-[10px]">Aura Decor · Secure Gateway</p>
+              <p className="font-bold text-sm">{demoMode ? 'Demo Checkout' : 'Razorpay'}</p>
+              <p className="text-white/80 text-[10px]">
+                {demoMode ? 'No real payment will be processed' : 'Aura Decor · Secure Gateway'}
+              </p>
             </div>
           </div>
           <button
@@ -41,26 +43,28 @@ export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing
 
           <div className="flex items-center gap-2 bg-[#2d72d9]/10 border border-[#2d72d9]/30 px-4 py-2.5 rounded-xl">
             <span className="text-xs font-bold text-[#2d72d9] uppercase tracking-widest">
-              Instant UPI / Card Payment
+              {demoMode ? 'DEMO PAYMENT · NO CHARGE' : 'Instant UPI / Card Payment'}
             </span>
           </div>
 
           <div className="space-y-3">
             <div>
               <label className="block text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-1">
-                Virtual Payment Address (VPA)
+                {demoMode ? 'Demo payment reference' : 'Virtual Payment Address (VPA)'}
               </label>
               <input
                 type="text"
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
-                placeholder="name@upi"
+                placeholder={demoMode ? 'Demo checkout' : 'name@upi'}
                 className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2d72d9] transition-colors"
               />
             </div>
             <div className="flex items-center justify-between text-xs text-stone-400 pt-1">
-              <span>Supported:</span>
-              <span className="font-bold text-stone-600">GPay · PhonePe · Paytm · NetBanking</span>
+              <span>{demoMode ? 'Payment mode:' : 'Supported:'}</span>
+              <span className="font-bold text-stone-600">
+                {demoMode ? 'Preview only · no payment taken' : 'GPay · PhonePe · Paytm · NetBanking'}
+              </span>
             </div>
           </div>
 
@@ -74,14 +78,14 @@ export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing
             ) : (
               <>
                 <Lock className="w-4 h-4" />
-                <span>Pay Now & Confirm Order</span>
+                <span>{demoMode ? 'Place Demo Order' : 'Pay Now & Confirm Order'}</span>
               </>
             )}
           </button>
 
           <p className="text-center text-[10px] text-stone-400 flex items-center justify-center gap-1.5 pt-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            256-bit SSL encrypted & verified by Razorpay
+            {demoMode ? 'This demo checkout does not collect or charge payment.' : '256-bit SSL encrypted & verified by Razorpay'}
           </p>
         </div>
       </div>

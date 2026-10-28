@@ -4,6 +4,7 @@ import { Filter, Search, ArrowUpDown, X, ShoppingBag, Eye, Wand2 } from 'lucide-
 import { useCart } from '../context/CartContext';
 import { QuickViewModal } from '../components/QuickViewModal';
 import api from '../services/api';
+import { normalizeProductList } from '../utils/productHelpers';
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
@@ -38,11 +39,37 @@ export const Products = () => {
       if (sortBy === 'newest') params.append('sort', 'newest');
 
       const res = await api.get(`/products?${params.toString()}`);
-      if (res.data?.data) {
-        setProducts(res.data.data);
-      }
+      const hasFilters = activeCategory !== 'all' || Boolean(activeRoom || activeStyle || searchQuery);
+      const normalized = normalizeProductList(res.data, !hasFilters);
+      setProducts(normalized);
     } catch (err) {
       console.error('Failed to fetch catalog:', err);
+      let fallback = normalizeProductList([]);
+      if (activeCategory !== 'all') {
+        fallback = fallback.filter((product) => product.category === activeCategory);
+      }
+      if (searchQuery.trim()) {
+        const term = searchQuery.trim().toLowerCase();
+        fallback = fallback.filter((product) =>
+          `${product.name} ${product.description}`.toLowerCase().includes(term)
+        );
+      }
+      if (activeRoom) {
+        const room = activeRoom.toLowerCase();
+        const categoriesForRoom = room.includes('bedroom')
+          ? ['Soft Furnishings', 'Lighting']
+          : room.includes('dining')
+            ? ['Lighting', 'Decorative Accents']
+            : room.includes('office') || room.includes('study')
+              ? ['Lighting', 'Wall Decor']
+              : room.includes('entryway') || room.includes('outdoor')
+                ? ['Rugs & Mats', 'Decorative Accents']
+                : ['Wall Decor', 'Lighting', 'Soft Furnishings'];
+        fallback = fallback.filter((product) => categoriesForRoom.includes(product.category));
+      }
+      if (sortBy === 'price_asc') fallback.sort((a, b) => a.base_price - b.base_price);
+      if (sortBy === 'price_desc') fallback.sort((a, b) => b.base_price - a.base_price);
+      setProducts(fallback);
     } finally {
       setLoading(false);
     }

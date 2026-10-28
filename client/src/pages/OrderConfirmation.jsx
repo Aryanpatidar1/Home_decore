@@ -10,6 +10,18 @@ export const OrderConfirmation = () => {
 
   useEffect(() => {
     const fetchOrder = async () => {
+      const localOrder = localStorage.getItem(`aura_order_${id}`);
+      if (localOrder) {
+        try {
+          setOrder(JSON.parse(localOrder));
+        } catch (err) {
+          console.error('Failed to read saved demo order:', err);
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
+
       try {
         const res = await api.get(`/orders/${id}`);
         if (res.data?.data) {
@@ -45,11 +57,16 @@ export const OrderConfirmation = () => {
   }
 
   const customDesign = order.customDesign || order.custom_design_id;
-  const productName = order.product?.name || order.items?.[0]?.name || 'Bespoke Curated Decor';
+  const productName = order.product?.name || 'Bespoke Curated Decor';
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
       <div className="bg-white rounded-[2.5rem] border border-stone-100 whisper-shadow text-center p-8 md:p-12 space-y-8">
+        {order.payment_info?.method === 'demo' && (
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+            Demo order only — no payment was processed or charged.
+          </div>
+        )}
         
         {/* Animated Checkmark */}
         <div className="relative w-24 h-24 mx-auto flex items-center justify-center bg-emerald-500/10 text-emerald-800 rounded-full">
@@ -75,10 +92,19 @@ export const OrderConfirmation = () => {
             <span className="text-stone-400">Order Number</span>
             <span className="text-emerald-950 font-mono font-bold">{order.order_number}</span>
           </div>
-          <div className="flex justify-between py-1 border-b border-stone-200/60">
-            <span className="text-stone-400">Base Piece</span>
-            <span className="text-primary font-bold">{productName}</span>
-          </div>
+          {order.product ? (
+            <div className="flex justify-between py-1 border-b border-stone-200/60">
+              <span className="text-stone-400">Base Piece</span>
+              <span className="text-primary font-bold">{productName}</span>
+            </div>
+          ) : (
+            <div className="flex justify-between gap-6 py-1 border-b border-stone-200/60">
+              <span className="shrink-0 text-stone-400">Items</span>
+              <span className="text-right text-primary font-bold">
+                {order.items?.map((item) => `${item.name} × ${item.qty}`).join(', ') || 'Store order'}
+              </span>
+            </div>
+          )}
           {customDesign && (
             <div className="flex justify-between py-1 border-b border-stone-200/60">
               <span className="text-stone-400">Curation Signature ID</span>
@@ -92,7 +118,9 @@ export const OrderConfirmation = () => {
             </span>
           </div>
           <div className="flex justify-between pt-2">
-            <span className="text-stone-500 font-bold">Total Charged</span>
+            <span className="text-stone-500 font-bold">
+              {order.payment_info?.method === 'demo' ? 'Demo Order Total' : 'Total Charged'}
+            </span>
             <span className="text-base font-extrabold text-emerald-950">
               ₹{Number(order.total_price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </span>

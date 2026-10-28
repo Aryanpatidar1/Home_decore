@@ -3,6 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { ArrowRight, Sparkles, Wand2, ShoppingBag, Eye, Compass } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import api from '../services/api';
+import { normalizeProductList } from '../utils/productHelpers';
 
 export const Home = () => {
   const { onOpenQuiz } = useOutletContext();
@@ -14,11 +15,11 @@ export const Home = () => {
     const fetchFeatured = async () => {
       try {
         const res = await api.get('/products?limit=6');
-        if (res.data?.data) {
-          setProducts(res.data.data);
-        }
+        const normalized = normalizeProductList(res.data);
+        setProducts(normalized);
       } catch (err) {
         console.error('Failed to load featured products:', err);
+        setProducts(normalizeProductList([]));
       } finally {
         setLoading(false);
       }

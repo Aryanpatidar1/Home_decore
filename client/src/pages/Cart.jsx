@@ -24,6 +24,7 @@ export const Cart = () => {
   const [shippingAddress, setShippingAddress] = useState(
     user?.addresses?.[0]?.street || ''
   );
+  const demoMode = cart.some((item) => String(item.product_id || item.id).startsWith('demo-'));
 
   const handleOpenCheckout = () => {
     if (cart.length === 0) return;
@@ -43,6 +44,44 @@ export const Cart = () => {
   const handleConfirmPayment = async (upiId) => {
     setIsProcessing(true);
     try {
+      if (demoMode) {
+        const orderId = `demo-order-${Date.now()}`;
+        const orderNumber = `DEMO-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${orderId.slice(-6).toUpperCase()}`;
+        const demoOrder = {
+          _id: orderId,
+          order_number: orderNumber,
+          total_price: total,
+          items: cart.map((item) => ({
+            product_id: item.product_id || item.id,
+            name: item.name,
+            price: Number(item.price),
+            qty: Number(item.qty) || 1,
+            style: item.style,
+            image: item.image
+          })),
+          shipping_address: {
+            name: customerName,
+            phone: customerPhone,
+            email: customerEmail,
+            address: shippingAddress
+          },
+          payment_info: {
+            method: 'demo',
+            status: 'not_charged',
+            payment_id: `demo_${Date.now()}`
+          },
+          status: 'demo order',
+          placed_at: new Date().toISOString()
+        };
+
+        localStorage.setItem(`aura_order_${orderId}`, JSON.stringify(demoOrder));
+        clearCart();
+        setRazorpayOpen(false);
+        addToast('Demo order created. No payment was taken.', 'success');
+        navigate(`/orders/${orderId}`);
+        return;
+      }
+
       const orderPayload = {
         items: cart,
         total_price: total,
@@ -299,7 +338,7 @@ export const Cart = () => {
                   className="w-full flex items-center justify-center gap-2 bg-[#2d72d9] text-white py-4 rounded-xl font-bold hover:bg-[#2561c0] transition-colors shadow-md text-sm"
                 >
                   <Lock className="w-4 h-4" />
-                  Continue to Razorpay Payment
+                  {demoMode ? 'Continue to Demo Checkout' : 'Continue to Razorpay Payment'}
                 </button>
               </div>
             </form>
@@ -314,6 +353,7 @@ export const Cart = () => {
         amount={total}
         onConfirm={handleConfirmPayment}
         isProcessing={isProcessing}
+        demoMode={demoMode}
       />
     </div>
   );
