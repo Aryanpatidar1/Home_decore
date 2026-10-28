@@ -4,7 +4,7 @@ import { LogIn, Lock, Mail } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const Login = () => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -17,7 +17,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    const res = await login(email, password);
+    const res = await login(identifier, password);
     setSubmitting(false);
     if (res.success) {
       navigate(redirect);
@@ -44,15 +44,16 @@ export const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-white/90 mb-2 uppercase tracking-widest text-[11px] font-bold">
-                Email Address
+                Email Address or Phone Number
               </label>
               <div className="relative">
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  autoComplete="username"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  placeholder="Enter your email or phone number"
                   className="w-full bg-white/20 border border-white/20 pl-11 pr-4 py-3.5 rounded-xl focus:outline-none focus:border-white/60 text-white placeholder-white/50 text-sm"
                 />
                 <Mail className="w-4 h-4 text-white/60 absolute left-4 top-4" />

@@ -7,21 +7,39 @@ const generateToken = (id) => {
   });
 };
 
+const normalizePhone = (value) => String(value || '').replace(/\D/g, '');
+
+const phoneLookupPattern = (digits) => new RegExp(
+  `^\\+?${digits.split('').join('[\\s().-]*')}$`
+);
+
 export const register = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, phone, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(422).json({ message: 'Name, email, and password are required.' });
+    if (!name || !email || !phone || !password) {
+      return res.status(422).json({ message: 'Name, email, phone number, and password are required.' });
     }
 
     if (password.length < 6) {
       return res.status(422).json({ message: 'Password must be at least 6 characters long.' });
     }
 
-    const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedPhone = normalizePhone(phone);
+    if (normalizedPhone.length < 7 || normalizedPhone.length > 15) {
+      return res.status(422).json({ message: 'Enter a valid phone number with 7 to 15 digits.' });
+    }
+
+    const existingUser = await User.findOne({
+      $or: [
+        { email: normalizedEmail },
+        { phone: { $regex: phoneLookupPattern(normalizedPhone) } }
+      ]
+    });
     if (existingUser) {
-      return res.status(409).json({ message: 'An account with this email address already exists.' });
+      const duplicateField = existingUser.email === normalizedEmail ? 'email address' : 'phone number';
+      return res.status(409).json({ message: `An account with this ${duplicateField} already exists.` });
     }
 
     // Set first registered user or specific email as admin for management convenience
@@ -30,7 +48,8 @@ export const register = async (req, res, next) => {
 
     const user = await User.create({
       name: name.trim(),
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
+      phone: normalizedPhone,
       password,
       role
     });
@@ -44,6 +63,7 @@ export const register = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: user.role
       }
     });
@@ -54,13 +74,26 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { identifier, email, phone, password } = req.body;
+    const loginIdentifier = String(identifier || email || phone || '').trim();
 
-    if (!email || !password) {
-      return res.status(422).json({ message: 'Email and password are required.' });
+    if (!loginIdentifier || !password) {
+      return res.status(422).json({ message: 'Email or phone number and password are required.' });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    const isEmail = loginIdentifier.includes('@');
+    let userQuery;
+    if (isEmail) {
+      userQuery = { email: loginIdentifier.toLowerCase() };
+    } else {
+      const normalizedPhone = normalizePhone(loginIdentifier);
+      if (normalizedPhone.length < 7 || normalizedPhone.length > 15) {
+        return res.status(422).json({ message: 'Enter a valid email address or phone number.' });
+      }
+      userQuery = { phone: { $regex: phoneLookupPattern(normalizedPhone) } };
+    }
+
+    const user = await User.findOne(userQuery);
     if (!user) {
       return res.status(401).json({ message: 'The provided credentials do not match our records.' });
     }
@@ -113,7 +146,24 @@ export const updateProfile = async (req, res, next) => {
     }
 
     if (req.body.name) user.name = req.body.name.trim();
-    if (req.body.phone) user.phone = req.body.phone.trim();
+    if (req.body.phone !== undefined) {
+      if (!String(req.body.phone).trim()) {
+        user.phone = undefined;
+      } else {
+        const normalizedPhone = normalizePhone(req.body.phone);
+        if (normalizedPhone.length < 7 || normalizedPhone.length > 15) {
+          return res.status(422).json({ message: 'Enter a valid phone number with 7 to 15 digits.' });
+        }
+        const existingUser = await User.findOne({
+          _id: { $ne: user._id },
+          phone: { $regex: phoneLookupPattern(normalizedPhone) }
+        }).select('_id');
+        if (existingUser) {
+          return res.status(409).json({ message: 'An account with this phone number already exists.' });
+        }
+        user.phone = normalizedPhone;
+      }
+    }
     if (req.body.addresses) user.addresses = req.body.addresses;
 
     await user.save();

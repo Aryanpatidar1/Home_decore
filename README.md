@@ -20,6 +20,7 @@ A luxury home décor e-commerce application with real-time interactive canvas vi
 - **Server Framework**: Express.js (REST APIs)
 - **Database**: MongoDB via Mongoose ODM
 - **Authentication**: JWT (JSON Web Tokens) with 7-day expiration
+- **Sign-in**: Email address or registered phone number with password
 - **Password Hashing**: bcryptjs (12 salt rounds)
 - **File Uploads**: Multer (5MB limit, image mime type whitelist)
 - **Security**: CORS origin whitelist, Express rate-limiter, sanitized input handling
@@ -148,6 +149,10 @@ npm run seed
   - Email: `user@example.com`
   - Password: `password123`
   - Role: `customer` (Has populated portfolio and saved addresses)
+
+New accounts require an email address and phone number; users can sign in with
+either identifier. Existing email-only accounts can continue signing in by email
+and add a phone number to their profile before using phone sign-in.
 
 ---
 

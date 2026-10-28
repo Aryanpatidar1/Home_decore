@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserPlus, User, Mail, Lock } from 'lucide-react';
+import { UserPlus, User, Mail, Phone, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 export const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -25,9 +26,14 @@ export const Register = () => {
       addToast('Password must be at least 6 characters long.', 'error');
       return;
     }
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (phoneDigits.length < 7 || phoneDigits.length > 15) {
+      addToast('Enter a valid phone number with 7 to 15 digits.', 'error');
+      return;
+    }
 
     setSubmitting(true);
-    const res = await register(name, email, password);
+    const res = await register(name, email, phone, password);
     setSubmitting(false);
 
     if (res.success) {
@@ -84,6 +90,24 @@ export const Register = () => {
                   className="w-full bg-white/20 border border-white/20 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:border-white/60 text-white placeholder-white/50 text-sm"
                 />
                 <Mail className="w-4 h-4 text-white/60 absolute left-4 top-3.5" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-white/90 mb-1.5 uppercase tracking-widest text-[11px] font-bold">
+                Phone Number
+              </label>
+              <div className="relative">
+                <input
+                  type="tel"
+                  required
+                  autoComplete="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+91 98765 43210"
+                  className="w-full bg-white/20 border border-white/20 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:border-white/60 text-white placeholder-white/50 text-sm"
+                />
+                <Phone className="w-4 h-4 text-white/60 absolute left-4 top-3.5" />
               </div>
             </div>
 
