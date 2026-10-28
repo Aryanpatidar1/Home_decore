@@ -12,14 +12,12 @@ export const MainLayout = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    // Check if URL triggers quiz (e.g. ?trigger_quiz=true)
     if (searchParams.get('trigger_quiz') === 'true') {
       setQuizOpen(true);
       searchParams.delete('trigger_quiz');
       setSearchParams(searchParams);
     }
 
-    // Fetch initial products for the quiz recommendation
     const loadProducts = async () => {
       try {
         const res = await api.get('/products?limit=6');

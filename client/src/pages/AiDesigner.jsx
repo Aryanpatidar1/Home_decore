@@ -45,7 +45,6 @@ export const AiDesigner = () => {
     setLoading(true);
     setDiagnosticReport(null);
 
-    // Animated progress sequence
     setProgress(20);
     setProgressMsg('Scanning spatial coordinates & luminance balance...');
 
@@ -98,7 +97,7 @@ export const AiDesigner = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
       
-      {/* ─── Header ──────────────────────────────────────────────────── */}
+      
       <div className="mb-10">
         <span className="inline-block px-3 py-1 mb-2 rounded-full bg-emerald-500/10 text-emerald-800 text-[11px] font-bold uppercase tracking-widest flex items-center gap-1.5 w-max">
           <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -114,7 +113,7 @@ export const AiDesigner = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* ─── Left Form ──────────────────────────────────────────────── */}
+        
         <div className="lg:col-span-5 bg-white rounded-[2rem] p-6 md:p-8 whisper-shadow border border-stone-100 h-fit space-y-6">
           <h2 className="font-headline-md text-xl text-primary font-bold flex items-center gap-2">
             <BrainCircuit className="w-5 h-5 text-emerald-800" />
@@ -193,10 +192,10 @@ export const AiDesigner = () => {
           </form>
         </div>
 
-        {/* ─── Right Results Showcase ─────────────────────────────────── */}
+        
         <div className="lg:col-span-7 bg-white rounded-[2rem] p-6 md:p-8 whisper-shadow border border-stone-100 min-h-[500px] flex flex-col justify-between">
           
-          {/* 1. Offline State */}
+          
           {!loading && !diagnosticReport && (
             <div className="my-auto py-16 flex flex-col items-center justify-center text-center space-y-4">
               <div className="w-20 h-20 rounded-full bg-emerald-500/10 text-emerald-800 flex items-center justify-center">
@@ -209,7 +208,7 @@ export const AiDesigner = () => {
             </div>
           )}
 
-          {/* 2. Loading Pipeline State */}
+          
           {loading && (
             <div className="my-auto py-16 flex flex-col items-center justify-center text-center space-y-6">
               <div className="relative w-24 h-24 flex items-center justify-center bg-emerald-500/10 rounded-full">
@@ -229,7 +228,7 @@ export const AiDesigner = () => {
             </div>
           )}
 
-          {/* 3. Diagnostic Report Active */}
+          
           {diagnosticReport && (
             <div className="space-y-8 animate-in fade-in duration-300">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-stone-100 pb-5 gap-3">
@@ -252,7 +251,7 @@ export const AiDesigner = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                {/* Left: Diagnostics & Palette */}
+                
                 <div className="space-y-6">
                   <div className="p-6 bg-stone-50 rounded-3xl border border-stone-100 space-y-3">
                     <h3 className="text-xs uppercase tracking-widest font-bold text-stone-400">
@@ -330,7 +329,7 @@ export const AiDesigner = () => {
                   </div>
                 )}
 
-                {/* Right: Recommendations & Studio Link */}
+                
                 <div className="space-y-6">
                   <div className="p-6 bg-stone-50 rounded-3xl border border-stone-100 space-y-3">
                     <h3 className="text-xs uppercase tracking-widest font-bold text-stone-400">
@@ -341,7 +340,7 @@ export const AiDesigner = () => {
                     </div>
                   </div>
 
-                  {/* Recommendation Card */}
+                  
                   <div className="p-6 bg-emerald-950 text-white rounded-[2rem] border border-emerald-900 shadow-xl space-y-4">
                     <div>
                       <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 text-[9px] font-bold uppercase tracking-widest mb-1.5">

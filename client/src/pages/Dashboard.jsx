@@ -28,7 +28,7 @@ export const Dashboard = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 min-h-screen">
       
-      {/* ─── Header ──────────────────────────────────────────────────── */}
+      
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
         <div>
           <span className="inline-block px-3 py-1 mb-2 rounded-full bg-emerald-500/10 text-emerald-800 text-[11px] font-bold uppercase tracking-widest">
@@ -87,7 +87,7 @@ export const Dashboard = () => {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Order List */}
+          
           <div className="lg:col-span-2 space-y-5">
             {orders.map((order) => {
               const customDesign = order.custom_design_id;
@@ -101,7 +101,7 @@ export const Dashboard = () => {
                   key={order._id}
                   className="bg-white rounded-[2rem] p-6 whisper-shadow border border-stone-100 flex flex-col sm:flex-row gap-5 transition-all hover:-translate-y-0.5"
                 >
-                  {/* Thumbnail */}
+                  
                   <div className="w-full sm:w-36 h-36 rounded-2xl bg-stone-100 overflow-hidden flex-shrink-0">
                     <img
                       src={thumbUrl}
@@ -110,7 +110,7 @@ export const Dashboard = () => {
                     />
                   </div>
 
-                  {/* Info */}
+                  
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start gap-2 mb-1">
@@ -160,7 +160,7 @@ export const Dashboard = () => {
             })}
           </div>
 
-          {/* Account Profile Sidebar */}
+          
           <div className="lg:col-span-1">
             <div className="bg-stone-50 rounded-[2rem] p-7 border border-stone-200/60 sticky top-28 space-y-6">
               <h3 className="font-headline-sm text-base font-bold text-primary">Profile Summary</h3>

@@ -10,7 +10,7 @@ export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing
     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
       <div className="w-full max-w-sm bg-white rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
         
-        {/* Razorpay Header */}
+        
         <div className="bg-[#2d72d9] px-6 py-5 flex items-center justify-between text-white">
           <div className="flex items-center gap-3">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -32,7 +32,7 @@ export const RazorpayModal = ({ isOpen, onClose, amount, onConfirm, isProcessing
           </button>
         </div>
 
-        {/* Payment Details */}
+        
         <div className="p-6 space-y-4">
           <div className="text-center">
             <p className="text-xs text-stone-400 uppercase tracking-widest font-semibold">Amount Due</p>

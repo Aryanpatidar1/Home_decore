@@ -59,7 +59,6 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
 
   if (!isOpen) return null;
 
-  // Selected matching product from products list
   const styleIndexMap = { minimalist: 0, bohemian: 1, japandi: 2, luxe: 0 };
   const targetProduct = products[styleIndexMap[quizStyle]] || products[0] || {
     id: '1',
@@ -85,7 +84,7 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl bg-white dark:bg-stone-950 rounded-[2.5rem] border border-stone-200 dark:border-stone-900 shadow-2xl overflow-hidden p-8 md:p-12 animate-in zoom-in-95 duration-200">
         
-        {/* Close Button */}
+        
         <button
           onClick={onClose}
           className="absolute top-6 right-6 p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-900 text-stone-400 hover:text-stone-700 transition-colors"
@@ -94,7 +93,7 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
           <X className="w-5 h-5" />
         </button>
 
-        {/* Step 1: Style */}
+        
         {step === 1 && (
           <div className="space-y-6">
             <div>
@@ -168,7 +167,7 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
           </div>
         )}
 
-        {/* Step 2: Room */}
+        
         {step === 2 && (
           <div className="space-y-6">
             <div>
@@ -198,7 +197,7 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
           </div>
         )}
 
-        {/* Step 3: Color Mood */}
+        
         {step === 3 && (
           <div className="space-y-6">
             <div>
@@ -255,7 +254,7 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
           </div>
         )}
 
-        {/* Step 4: Spinner */}
+        
         {step === 4 && (
           <div className="text-center py-10 space-y-6">
             <div className="relative w-20 h-20 mx-auto flex items-center justify-center bg-emerald-500/10 text-emerald-800 rounded-full">
@@ -276,7 +275,7 @@ export const AestheticQuizModal = ({ isOpen, onClose, products = [] }) => {
           </div>
         )}
 
-        {/* Step 5: Results */}
+        
         {step === 5 && (
           <div className="space-y-6">
             <div className="text-center space-y-1">

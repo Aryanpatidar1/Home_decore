@@ -39,7 +39,6 @@ export const optionalAuth = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'aura_decor_jwt_secret_dev_key_2026_xyz');
       req.user = await User.findById(decoded.id).select('-password');
     } catch (error) {
-      // Ignore token failure for optional endpoints
       req.user = null;
     }
   } else {

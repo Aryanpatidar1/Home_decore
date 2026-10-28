@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import { Product } from '../models/Product.js';
 import { seedProductsData } from '../utils/seedDatabase.js';
 
-// Demo-mode catalog (only used if MongoDB is unreachable): same products as the seeder
 const fallbackProducts = seedProductsData.map((p, i) => ({
   ...p,
   _id: `demo-${i + 1}`
@@ -64,7 +63,6 @@ export const getProducts = async (req, res, next) => {
       ];
     }
 
-    // Room and style matching heuristic
     if (room) {
       const roomLower = room.toLowerCase();
       if (roomLower.includes('living')) {
@@ -212,7 +210,6 @@ export const deleteProduct = async (req, res, next) => {
       return res.status(404).json({ message: 'Product not found.' });
     }
 
-    // Toggle active status or delete
     product.is_active = !product.is_active;
     await product.save();
 

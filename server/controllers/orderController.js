@@ -17,7 +17,6 @@ export const createOrder = async (req, res, next) => {
     let linkedDesign = null;
 
     if (custom_design_id) {
-      // 1. Order from Custom Design
       linkedDesign = await CustomDesign.findById(custom_design_id).populate('product_id');
       if (!linkedDesign) {
         return res.status(404).json({ message: 'Selected custom design does not exist.' });
@@ -28,7 +27,6 @@ export const createOrder = async (req, res, next) => {
         return res.status(422).json({ message: 'Custom design has no valid product attached.' });
       }
 
-      // Server calculates base price + 18% GST
       const subtotal = product.base_price;
       const gst = subtotal * 0.18;
       calculatedTotal = subtotal + gst;
@@ -42,11 +40,9 @@ export const createOrder = async (req, res, next) => {
         image: linkedDesign.room_image_path || product.image_path
       }];
 
-      // Mark design as ordered
       linkedDesign.status = 'ordered';
       await linkedDesign.save();
     } else if (items && Array.isArray(items) && items.length > 0) {
-      // 2. Direct Cart Checkout
       let subtotal = 0;
       for (const item of items) {
         const itemPrice = parseFloat(item.price);
@@ -134,7 +130,6 @@ export const getOrderById = async (req, res, next) => {
       return res.status(404).json({ message: 'Order not found.' });
     }
 
-    // Check ownership if user is not admin
     if (order.user_id && req.user && req.user.role !== 'admin' && !order.user_id.equals(req.user._id)) {
       return res.status(403).json({ message: 'Access denied: You cannot view another user\'s order.' });
     }

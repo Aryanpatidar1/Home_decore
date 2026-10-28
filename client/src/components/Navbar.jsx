@@ -17,13 +17,13 @@ export const Navbar = ({ onOpenQuiz }) => {
       <nav className="sticky top-0 w-full z-50 bg-white/85 dark:bg-stone-950/85 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 shadow-[0_10px_40px_-15px_rgba(6,78,59,0.08)]">
         <div className="flex justify-between items-center max-w-7xl mx-auto px-6 md:px-12 h-20">
           
-          {/* Brand Logo */}
+          
           <Link to="/" className="text-2xl font-bold tracking-tighter text-emerald-950 dark:text-emerald-50 hover:opacity-85 transition-opacity flex items-center gap-2">
             <span className="w-8 h-8 rounded-xl bg-emerald-950 text-white flex items-center justify-center text-sm font-extrabold shadow-sm">A</span>
             <span>Aura Decor</span>
           </Link>
 
-          {/* Desktop Navigation Links */}
+          
           <div className="hidden md:flex items-center gap-8 font-headline-md text-sm tracking-wide">
             <Link
               to="/"
@@ -68,9 +68,9 @@ export const Navbar = ({ onOpenQuiz }) => {
             </Link>
           </div>
 
-          {/* Right Action Icons */}
+          
           <div className="flex items-center gap-3 md:gap-4">
-            {/* Cart Icon with Live Badge */}
+            
             <Link
               to="/cart"
               className="relative p-2.5 text-stone-600 hover:text-emerald-900 hover:bg-emerald-50 rounded-full transition-all"
@@ -84,7 +84,7 @@ export const Navbar = ({ onOpenQuiz }) => {
               )}
             </Link>
 
-            {/* Auth Buttons */}
+            
             {isAuthenticated ? (
               <div className="hidden md:flex items-center gap-3">
                 {isAdmin && (
@@ -128,7 +128,7 @@ export const Navbar = ({ onOpenQuiz }) => {
               </div>
             )}
 
-            {/* Mobile Hamburger Button */}
+            
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-stone-700 hover:text-emerald-900 rounded-lg hover:bg-stone-100 transition-colors"
@@ -140,7 +140,7 @@ export const Navbar = ({ onOpenQuiz }) => {
         </div>
       </nav>
 
-      {/* Mobile Slide-over Drawer */}
+      
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">
           <div

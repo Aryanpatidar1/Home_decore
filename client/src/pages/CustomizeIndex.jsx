@@ -41,7 +41,7 @@ export const CustomizeIndex = () => {
   return (
     <div className="space-y-16 pb-24">
       
-      {/* ─── Hero Header ────────────────────────────────────────────── */}
+      
       <section className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-stone-900 text-white py-20 md:py-28">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-emerald-700/20 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-amber-900/20 blur-3xl pointer-events-none" />
@@ -60,7 +60,7 @@ export const CustomizeIndex = () => {
               Choose a base piece from our collection, then use our interactive visualizer canvas to adjust colours, dimensions, frame mouldings, and AI abstract art layouts before it's handcrafted.
             </p>
 
-            {/* 3-Step Flow */}
+            
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 font-bold text-xs shrink-0">1</div>
@@ -85,7 +85,7 @@ export const CustomizeIndex = () => {
         </div>
       </section>
 
-      {/* ─── Selection Grid ─────────────────────────────────────────── */}
+      
       <section className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
           <div>
@@ -97,7 +97,7 @@ export const CustomizeIndex = () => {
             </h2>
           </div>
 
-          {/* Filter Pills */}
+          
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button

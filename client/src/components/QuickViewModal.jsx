@@ -26,7 +26,7 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
     <div className="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in duration-200">
       <div className="bg-white dark:bg-stone-950 w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl border border-stone-100 dark:border-stone-900 flex flex-col md:flex-row max-h-[90vh] animate-in zoom-in-95 duration-200">
         
-        {/* Left: Product Image */}
+        
         <div className="md:w-1/2 bg-stone-50 dark:bg-stone-900/50 relative">
           <img
             className="w-full h-full object-cover max-h-[320px] md:max-h-full"
@@ -41,7 +41,7 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Right: Specifications & Add to Cart */}
+        
         <div className="md:w-1/2 p-8 md:p-10 flex flex-col justify-between overflow-y-auto space-y-6">
           <div className="space-y-4">
             <div className="flex justify-between items-start">

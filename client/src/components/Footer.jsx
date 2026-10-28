@@ -24,7 +24,7 @@ export const Footer = ({ onOpenQuiz }) => {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           
-          {/* Brand Col */}
+          
           <div className="col-span-1 md:col-span-1">
             <div className="text-xl font-bold text-emerald-950 dark:text-emerald-50 mb-4 flex items-center gap-2">
               <span className="w-7 h-7 rounded-lg bg-emerald-950 text-white flex items-center justify-center text-xs font-bold">A</span>
@@ -46,7 +46,7 @@ export const Footer = ({ onOpenQuiz }) => {
             </div>
           </div>
 
-          {/* Collections */}
+          
           <div>
             <h4 className="font-headline-md text-xs font-bold text-stone-900 dark:text-white mb-6 uppercase tracking-widest">Collections</h4>
             <ul className="space-y-3.5 text-sm font-medium text-stone-500">
@@ -58,7 +58,7 @@ export const Footer = ({ onOpenQuiz }) => {
             </ul>
           </div>
 
-          {/* Experience */}
+          
           <div>
             <h4 className="font-headline-md text-xs font-bold text-stone-900 dark:text-white mb-6 uppercase tracking-widest">Experience</h4>
             <ul className="space-y-3.5 text-sm font-medium text-stone-500">
@@ -77,7 +77,7 @@ export const Footer = ({ onOpenQuiz }) => {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          
           <div>
             <h4 className="font-headline-md text-xs font-bold text-stone-900 dark:text-white mb-6 uppercase tracking-widest">Newsletter</h4>
             <p className="text-stone-500 mb-4 text-sm leading-relaxed">
@@ -110,7 +110,7 @@ export const Footer = ({ onOpenQuiz }) => {
           </div>
         </div>
 
-        {/* Bottom Sub-footer */}
+        
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-10 border-t border-stone-200 dark:border-stone-800 text-xs text-stone-400">
           <div>© {new Date().getFullYear()} Aura Decor. The Art of Living Well. Handcrafted with luxury standards.</div>
           <div className="flex flex-wrap justify-center gap-6 font-semibold uppercase tracking-wider text-[11px]">

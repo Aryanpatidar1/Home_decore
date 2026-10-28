@@ -68,7 +68,7 @@ export const OrderConfirmation = () => {
           </div>
         )}
         
-        {/* Animated Checkmark */}
+        
         <div className="relative w-24 h-24 mx-auto flex items-center justify-center bg-emerald-500/10 text-emerald-800 rounded-full">
           <CheckCircle2 className="w-14 h-14 text-emerald-700 animate-in zoom-in" />
           <div className="absolute inset-0 border-4 border-emerald-500/30 rounded-full scale-110 animate-ping opacity-25" />
@@ -86,7 +86,7 @@ export const OrderConfirmation = () => {
           </p>
         </div>
 
-        {/* Order Details Card */}
+        
         <div className="bg-stone-50 rounded-3xl p-6 border border-stone-100 max-w-md mx-auto text-left space-y-3.5 text-xs font-semibold">
           <div className="flex justify-between py-1 border-b border-stone-200/60">
             <span className="text-stone-400">Order Number</span>
@@ -127,7 +127,7 @@ export const OrderConfirmation = () => {
           </div>
         </div>
 
-        {/* Production Milestones Timeline */}
+        
         <div className="max-w-md mx-auto space-y-4 text-left pt-2">
           <h3 className="text-xs uppercase tracking-widest font-bold text-stone-400">Next Steps</h3>
           <div className="relative pl-8 space-y-6 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-emerald-500/30">
@@ -168,7 +168,7 @@ export const OrderConfirmation = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6">
           <Link
             to="/products"

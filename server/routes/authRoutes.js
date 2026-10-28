@@ -6,8 +6,8 @@ import { verifyToken } from '../middleware/auth.js';
 const router = express.Router();
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // 20 requests per window
+  windowMs: 15 * 60 * 1000,
+  max: 20,
   message: { message: 'Too many authentication attempts, please try again after 15 minutes.' }
 });
 

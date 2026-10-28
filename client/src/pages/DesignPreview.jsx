@@ -195,7 +195,6 @@ export const DesignPreview = () => {
     }
     ctx.restore();
 
-    // Dimension lines
     const rY = fY + fHeight + 16;
     ctx.strokeStyle = 'rgba(255,255,255,0.7)';
     ctx.lineWidth = 1;
@@ -314,7 +313,7 @@ export const DesignPreview = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
       
-      {/* ─── Header ──────────────────────────────────────────────────── */}
+      
       <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <span className="inline-block px-3 py-1 mb-2 rounded-full bg-emerald-500/10 text-emerald-800 text-[11px] font-bold uppercase tracking-widest">
@@ -335,7 +334,7 @@ export const DesignPreview = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* ─── Left: Canvas Mockup ─────────────────────────────────────── */}
+        
         <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 whisper-shadow border border-stone-100">
           <h2 className="font-headline-md text-xl text-primary font-bold mb-6">Visualizer Integration</h2>
           <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-stone-100 shadow-md">
@@ -361,7 +360,7 @@ export const DesignPreview = () => {
           )}
         </div>
 
-        {/* ─── Right: Specifications & Payment ───────────────────────── */}
+        
         <div className="lg:col-span-5 bg-white rounded-3xl p-6 md:p-8 whisper-shadow border border-stone-100 flex flex-col justify-between space-y-6">
           <div className="space-y-6">
             <h2 className="font-headline-md text-xl text-primary font-bold border-b border-stone-100 pb-4">
@@ -407,7 +406,7 @@ export const DesignPreview = () => {
               </div>
             </div>
 
-            {/* Address Form */}
+            
             <form onSubmit={handleOpenPayment} className="space-y-4 pt-4 border-t border-stone-100">
               <div className="space-y-2">
                 <label className="block text-xs uppercase tracking-widest font-semibold text-stone-400">
@@ -450,7 +449,7 @@ export const DesignPreview = () => {
 
       </div>
 
-      {/* Razorpay Modal */}
+      
       <RazorpayModal
         isOpen={isRazorpayOpen}
         onClose={() => setIsRazorpayOpen(false)}

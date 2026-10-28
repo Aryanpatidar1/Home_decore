@@ -21,11 +21,9 @@ const runTests = async () => {
   };
 
   try {
-    // 1. Health Check
     const healthRes = await axios.get(`${BASE_URL}/health`);
     assert(healthRes.status === 200 && healthRes.data.status === 'online', '1. Server Health Check API');
 
-    // 2. Fetch Catalog Products
     const productsRes = await axios.get(`${BASE_URL}/products`);
     assert(
       productsRes.status === 200 && Array.isArray(productsRes.data.data) && productsRes.data.data.length >= 15,
@@ -35,14 +33,12 @@ const runTests = async () => {
     const sampleProduct = productsRes.data.data[0];
     const productId = sampleProduct._id;
 
-    // 3. Fetch Single Product
     const singleProductRes = await axios.get(`${BASE_URL}/products/${productId}`);
     assert(
       singleProductRes.status === 200 && singleProductRes.data.data.name === sampleProduct.name,
       `3. Single Product Query by ID (${sampleProduct.name})`
     );
 
-    // 4. Test User Authentication (Login as seeded Demo User)
     const loginRes = await axios.post(`${BASE_URL}/auth/login`, {
       email: 'user@example.com',
       password: 'password123'
@@ -55,14 +51,12 @@ const runTests = async () => {
     const userToken = loginRes.data.token;
     const authHeaders = { headers: { Authorization: `Bearer ${userToken}` } };
 
-    // 5. Test Authenticated Profile Route
     const meRes = await axios.get(`${BASE_URL}/auth/me`, authHeaders);
     assert(
       meRes.status === 200 && meRes.data.user.name === 'Arjun Sharma',
       '5. Authenticated User Profile Query (/api/auth/me)'
     );
 
-    // 6. Test AI Wall Art Spec Generator
     const aiSpecRes = await axios.post(`${BASE_URL}/ai/generate-art`, {
       prompt: 'bohemian abstract rising sun with warm earth tones'
     });
@@ -71,7 +65,6 @@ const runTests = async () => {
       `6. AI Art Spec Generator (Generated palette: "${aiSpecRes.data.data.palette_name}")`
     );
 
-    // 7. Test AI Room Spatial Analysis
     const aiRoomRes = await axios.post(`${BASE_URL}/ai/analyze-room`, {
       objective: 'Create a peaceful Japandi reading nook',
       room_scene: 'living'
@@ -81,7 +74,6 @@ const runTests = async () => {
       '7. AI Spatial Diagnostics & Palette Synthesis'
     );
 
-    // 8. Test Custom Design Save
     const designPayload = {
       product_id: productId,
       design_json: {
@@ -100,14 +92,12 @@ const runTests = async () => {
     );
     const designId = designRes.data.design_id;
 
-    // 9. Fetch Saved Design
     const getDesignRes = await axios.get(`${BASE_URL}/designs/${designId}`);
     assert(
       getDesignRes.status === 200 && getDesignRes.data.data.product?.name === sampleProduct.name,
       '9. Populated Custom Design Retrieval (/api/designs/:id)'
     );
 
-    // 10. Test Order Creation from Custom Design
     const orderPayload = {
       custom_design_id: designId,
       shipping_address: 'Flat 4B, Prestige Heights, MG Road, Bengaluru — 560001',
@@ -124,21 +114,18 @@ const runTests = async () => {
     );
     const orderId = orderRes.data.order_id;
 
-    // 11. Fetch Order Confirmation Details
     const getOrderRes = await axios.get(`${BASE_URL}/orders/${orderId}`, authHeaders);
     assert(
       getOrderRes.status === 200 && getOrderRes.data.data.status === 'placed',
       '11. Order Confirmation Retrieval (/api/orders/:id)'
     );
 
-    // 12. Fetch Customer Order History / Portfolio
     const userOrdersRes = await axios.get(`${BASE_URL}/orders`, authHeaders);
     assert(
       userOrdersRes.status === 200 && Array.isArray(userOrdersRes.data.data) && userOrdersRes.data.data.length >= 1,
       `12. Customer Portfolio Orders Query (${userOrdersRes.data.data.length} orders found)`
     );
 
-    // 13. Test Admin Authentication & Milestone Status Update
     const adminLoginRes = await axios.post(`${BASE_URL}/auth/login`, {
       email: 'admin@auradecor.com',
       password: 'password123'
@@ -149,7 +136,6 @@ const runTests = async () => {
     );
     const adminHeaders = { headers: { Authorization: `Bearer ${adminLoginRes.data.token}` } };
 
-    // 14. Admin Milestone Status Transition
     const updateStatusRes = await axios.patch(
       `${BASE_URL}/orders/${orderId}/status`,
       { status: 'crafting' },

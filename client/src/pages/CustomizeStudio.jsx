@@ -32,7 +32,6 @@ export const CustomizeStudio = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [canUndo, setCanUndo] = useState(false);
 
-  // Visualizer settings state
   const initialColor = searchParams.get('color') || '#064e3b';
   const [size, setSize] = useState('A3');
   const [scale, setScale] = useState(100);
@@ -41,20 +40,17 @@ export const CustomizeStudio = () => {
   const [customRoomImageFile, setCustomRoomImageFile] = useState(null);
   const [customRoomImageUrl, setCustomRoomImageUrl] = useState(null);
 
-  // AI Art spec state
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiArtSpec, setAiArtSpec] = useState(null);
   const [aiSynthesizedImage, setAiSynthesizedImage] = useState(null);
   const [aiFeedback, setAiFeedback] = useState(null);
 
-  // Canvas and dragging state
   const canvasRef = useRef(null);
   const pointerActionRef = useRef(null);
   const sceneHistoryRef = useRef([]);
   const [backdropVersion, setBackdropVersion] = useState(0);
 
-  // Preloaded image references
   const backdropImagesRef = useRef({});
   const productBaseImageRef = useRef(null);
   const sceneProductImagesRef = useRef({});
@@ -78,7 +74,6 @@ export const CustomizeStudio = () => {
     { id: 'balcony', label: 'Balcony', image: backdropUrls.balcony }
   ];
 
-  // 1. Fetch Product Data
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -111,7 +106,6 @@ export const CustomizeStudio = () => {
           setSceneItems([initialItem]);
           setSelectedItemId(initialItem.id);
 
-          // Preload product image
           if (loadedProduct?.image_path) {
             const pImg = new Image();
             pImg.crossOrigin = 'anonymous';
@@ -141,7 +135,6 @@ export const CustomizeStudio = () => {
       });
   }, []);
 
-  // 2. Preload Backdrops
   useEffect(() => {
     Object.entries(backdropUrls).forEach(([key, url]) => {
       const img = new Image();
@@ -158,12 +151,10 @@ export const CustomizeStudio = () => {
     });
   }, []);
 
-  // 3. Re-render canvas whenever controls change
   useEffect(() => {
     renderCanvas();
   }, [size, scale, backdrop, customRoomImageUrl, aiArtSpec, aiSynthesizedImage, sceneItems, selectedItemId, product, backdropVersion]);
 
-  // Handle Room Photo Upload
   const handleRoomImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -180,7 +171,6 @@ export const CustomizeStudio = () => {
     }
   };
 
-  // Generate AI Vector Art
   const handleGenerateAiArt = async () => {
     if (!aiPrompt.trim()) {
       addToast('Please enter an art prompt (e.g. bohemian abstract sun sunset)', 'error');
@@ -207,7 +197,6 @@ export const CustomizeStudio = () => {
           typography: spec.typography_recommendation
         });
 
-        // Load synthesized image if returned
         if (spec.synthesized_image_base64) {
           const aiImg = new Image();
           aiImg.onload = () => {
@@ -355,7 +344,6 @@ export const CustomizeStudio = () => {
     setScale(100);
   };
 
-  // Save Design and Proceed to Review
   const handleSaveDesign = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -427,7 +415,6 @@ export const CustomizeStudio = () => {
     }
   };
 
-  // ─── CANVAS RENDERING ENGINE ──────────────────────────────────────
   const renderCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -437,7 +424,6 @@ export const CustomizeStudio = () => {
 
     ctx.clearRect(0, 0, width, height);
 
-    // 1. Draw Backdrop Image
     const activeBackdropImg = backdrop === 'custom'
       ? backdropImagesRef.current['custom']
       : backdropImagesRef.current[backdrop] || backdropImagesRef.current['living'];
@@ -536,7 +522,6 @@ export const CustomizeStudio = () => {
     ctx.fillRect(width * 0.58, 0, width * 0.42, 343);
   };
 
-  // Category Renderers
   const drawWallDecor = (ctx, fX, fY, fWidth, fHeight, { image, useAiArt, color: itemColor, frameStyle: itemFrameStyle } = {}) => {
     ctx.save();
     ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
@@ -544,7 +529,6 @@ export const CustomizeStudio = () => {
     ctx.shadowOffsetX = 8;
     ctx.shadowOffsetY = 16;
 
-    // Frame Moulding
     const frameColors = {
       black: '#1c1917',
       oak: '#8c6239',
@@ -560,7 +544,6 @@ export const CustomizeStudio = () => {
       ctx.fillRect(fX, fY, fWidth, fHeight);
     }
 
-    // Inner Passpartout Matting
     const matting = activeFrameStyle === 'none' ? 0 : 18;
     const innerX = fX + borderThickness + matting;
     const innerY = fY + borderThickness + matting;
@@ -572,7 +555,6 @@ export const CustomizeStudio = () => {
       ctx.fillRect(fX + borderThickness, fY + borderThickness, fWidth - borderThickness * 2, fHeight - borderThickness * 2);
     }
 
-    // Artwork Area
     if (useAiArt && aiSynthesizedImage) {
       ctx.drawImage(aiSynthesizedImage, innerX, innerY, innerW, innerH);
     } else if (useAiArt && aiArtSpec) {
@@ -594,14 +576,12 @@ export const CustomizeStudio = () => {
   };
 
   const drawAiVectorArt = (ctx, x, y, w, h, spec, itemColor) => {
-    // Gradient background
     const grad = ctx.createLinearGradient(x, y, x + w, y + h);
     grad.addColorStop(0, spec.gradient_start || '#faf9f6');
     grad.addColorStop(1, spec.gradient_end || '#e5e5e0');
     ctx.fillStyle = grad;
     ctx.fillRect(x, y, w, h);
 
-    // Primary shape
     ctx.fillStyle = itemColor || spec.shape_color || '#064e3b';
     const pX = x + w / 2;
     const pY = y + h / 2;
@@ -628,7 +608,6 @@ export const CustomizeStudio = () => {
       ctx.fill();
     }
 
-    // Typography
     if (spec.typography) {
       ctx.fillStyle = '#1c1917';
       ctx.font = `600 12px ${spec.curated_font === 'serif' ? 'serif' : 'sans-serif'}`;
@@ -639,7 +618,6 @@ export const CustomizeStudio = () => {
 
   const drawLighting = (ctx, x, y, w, h, itemColor, itemFrameStyle) => {
     ctx.save();
-    // Ambient light glow
     const glow = ctx.createRadialGradient(x + w / 2, y + h * 0.4, 10, x + w / 2, y + h * 0.4, 120);
     glow.addColorStop(0, 'rgba(255, 252, 230, 0.9)');
     glow.addColorStop(0.3, 'rgba(253, 224, 71, 0.25)');
@@ -649,7 +627,6 @@ export const CustomizeStudio = () => {
     ctx.arc(x + w / 2, y + h * 0.4, 120, 0, Math.PI * 2);
     ctx.fill();
 
-    // Fixture base & shade
     ctx.fillStyle = itemColor;
     ctx.beginPath();
     ctx.moveTo(x + w * 0.2, y + h * 0.2);
@@ -659,7 +636,6 @@ export const CustomizeStudio = () => {
     ctx.closePath();
     ctx.fill();
 
-    // Stem & Base
     ctx.fillStyle = itemFrameStyle === 'gold' ? '#d4af37' : '#1c1917';
     ctx.fillRect(x + w / 2 - 4, y + h * 0.55, 8, h * 0.35);
     ctx.beginPath();
@@ -674,7 +650,6 @@ export const CustomizeStudio = () => {
     ctx.shadowBlur = 16;
     ctx.shadowOffsetY = 8;
 
-    // Cushion rounded diamond/pillow contour
     ctx.fillStyle = itemColor;
     ctx.beginPath();
     ctx.moveTo(x + w * 0.1, y + h * 0.1);
@@ -685,7 +660,6 @@ export const CustomizeStudio = () => {
     ctx.closePath();
     ctx.fill();
 
-    // Inner embroidery highlight
     ctx.strokeStyle = 'rgba(255,255,255,0.3)';
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -696,7 +670,6 @@ export const CustomizeStudio = () => {
     ctx.save();
     ctx.shadowColor = 'rgba(0,0,0,0.2)';
     ctx.shadowBlur = 10;
-    // Perspective projection on floor
     ctx.fillStyle = itemColor;
     ctx.beginPath();
     ctx.moveTo(x + w * 0.15, y);
@@ -711,7 +684,6 @@ export const CustomizeStudio = () => {
   const drawAccent = (ctx, x, y, w, h, itemColor) => {
     ctx.save();
     ctx.fillStyle = itemColor;
-    // Trio of stylized ceramic vases
     ctx.beginPath();
     ctx.ellipse(x + w * 0.3, y + h * 0.6, 25, 40, 0, 0, Math.PI * 2);
     ctx.ellipse(x + w * 0.65, y + h * 0.5, 30, 55, 0, 0, Math.PI * 2);
@@ -719,7 +691,6 @@ export const CustomizeStudio = () => {
     ctx.restore();
   };
 
-  // ─── Select, Move, Resize & Rotate Scene Items ───────────────────
   const getCanvasPoint = (event) => {
     const rect = canvasRef.current.getBoundingClientRect();
     return {
@@ -832,7 +803,7 @@ export const CustomizeStudio = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
       
-      {/* ─── Breadcrumb & Title ──────────────────────────────────────── */}
+      
       <div className="mb-8">
         <Link
           to="/products"
@@ -859,7 +830,7 @@ export const CustomizeStudio = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* ─── Left: Controls Column ─────────────────────────────────── */}
+        
         <div className="lg:col-span-5 bg-white rounded-3xl p-6 md:p-8 whisper-shadow border border-stone-100 space-y-6 h-fit">
           <h2 className="font-headline-md text-xl text-primary font-bold">Visualizer Controls</h2>
 
@@ -947,7 +918,7 @@ export const CustomizeStudio = () => {
             </div>
           </section>
 
-          {/* AI Vector Art Spec Prompt Box */}
+          
           <div className="p-5 bg-gradient-to-br from-emerald-950 to-emerald-900 text-white rounded-2xl border border-emerald-800/40 space-y-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-emerald-300 animate-pulse" />
@@ -977,7 +948,7 @@ export const CustomizeStudio = () => {
             </div>
           </div>
 
-          {/* AI Feedback Rationale */}
+          
           {aiFeedback && (
             <div className="p-4 bg-stone-50 border border-emerald-500/30 rounded-2xl space-y-2 text-xs">
               <div className="flex items-center gap-1.5 font-bold text-emerald-900 text-[11px] uppercase tracking-wider">
@@ -991,7 +962,7 @@ export const CustomizeStudio = () => {
 
           <form onSubmit={handleSaveDesign} className="space-y-6">
             
-            {/* Color Profile */}
+            
             <div className="space-y-2">
               <label className="block text-xs uppercase tracking-widest font-semibold text-stone-400">
                 Color Profile{selectedSceneItem ? ` · ${selectedSceneItem.product.name}` : ''}
@@ -1020,7 +991,7 @@ export const CustomizeStudio = () => {
               </div>
             </div>
 
-            {/* Canvas Dimensions */}
+            
             <div className="space-y-2">
               <label className="block text-xs uppercase tracking-widest font-semibold text-stone-400">Canvas Dimensions</label>
               <select
@@ -1047,7 +1018,7 @@ export const CustomizeStudio = () => {
               </select>
             </div>
 
-            {/* Scale Slider */}
+            
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs uppercase tracking-widest font-semibold text-stone-400">
                 <span>Interactive Decor Scale</span>
@@ -1082,7 +1053,7 @@ export const CustomizeStudio = () => {
               />
             </div>
 
-            {/* Frame Moulding */}
+            
             <div className="space-y-2">
               <label className="block text-xs uppercase tracking-widest font-semibold text-stone-400">
                 Frame Moulding{selectedSceneItem ? ` · ${selectedSceneItem.product.name}` : ''}
@@ -1100,7 +1071,7 @@ export const CustomizeStudio = () => {
               </select>
             </div>
 
-            {/* Room Scene Backdrop */}
+            
             <div className="space-y-2">
               <label className="block text-xs uppercase tracking-widest font-semibold text-stone-400">Room Scene Backdrop</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1125,7 +1096,7 @@ export const CustomizeStudio = () => {
               </div>
             </div>
 
-            {/* Upload Custom Room Photo */}
+            
             <div className="space-y-2">
               <label className="block text-xs uppercase tracking-widest font-semibold text-stone-400">
                 Upload Your Wall Photo (Optional)
@@ -1138,7 +1109,7 @@ export const CustomizeStudio = () => {
               />
             </div>
 
-            {/* Submit Button */}
+            
             <button
               type="submit"
               disabled={submitting}
@@ -1150,7 +1121,7 @@ export const CustomizeStudio = () => {
           </form>
         </div>
 
-        {/* ─── Right: Canvas Showcase ─────────────────────────────────── */}
+        
         <div className="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 whisper-shadow border border-stone-100 flex flex-col justify-between h-fit lg:sticky lg:top-24">
           <div>
             <div className="flex justify-between items-center mb-6">
@@ -1161,7 +1132,7 @@ export const CustomizeStudio = () => {
               </span>
             </div>
 
-            {/* Canvas Element */}
+            
             <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-stone-100 shadow-md">
               <canvas
                 ref={canvasRef}
@@ -1174,13 +1145,13 @@ export const CustomizeStudio = () => {
                 className="w-full h-auto block cursor-grab active:cursor-grabbing select-none touch-none"
               />
 
-              {/* Drag indicator pill */}
+              
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/60 text-white text-[10px] font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-sm pointer-events-none">
                 <Move className="w-3.5 h-3.5" />
                 Drag to move · corner handle to resize · top handle to rotate
               </div>
 
-              {/* AI Loading status overlay */}
+              
               {aiLoading && (
                 <div className="absolute inset-0 bg-emerald-950/80 backdrop-blur-sm flex flex-col items-center justify-center text-center text-white space-y-3">
                   <Sparkles className="w-10 h-10 animate-spin text-emerald-300" />

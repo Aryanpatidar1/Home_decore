@@ -18,7 +18,6 @@ router.post('/', verifyToken, isAdmin, upload.single('image'), createProduct);
 router.put('/:id', verifyToken, isAdmin, upload.single('image'), updateProduct);
 router.delete('/:id', verifyToken, isAdmin, deleteProduct);
 
-// Reviews
 router.get('/:productId/reviews', getProductReviews);
 router.post('/:productId/reviews', verifyToken, createReview);
 

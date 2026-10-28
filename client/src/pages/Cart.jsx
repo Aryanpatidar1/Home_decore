@@ -17,7 +17,6 @@ export const Cart = () => {
   const [razorpayOpen, setRazorpayOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Checkout form fields
   const [customerName, setCustomerName] = useState(user?.name || '');
   const [customerPhone, setCustomerPhone] = useState(user?.phone || '');
   const [customerEmail, setCustomerEmail] = useState(user?.email || '');
@@ -136,7 +135,7 @@ export const Cart = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 min-h-screen">
       
-      {/* ─── Header ──────────────────────────────────────────────────── */}
+      
       <div className="mb-10">
         <span className="inline-block px-3 py-1 mb-2 rounded-full bg-emerald-500/10 text-emerald-800 text-[11px] font-bold uppercase tracking-widest">
           Your Selection ({itemCount} {itemCount === 1 ? 'item' : 'items'})
@@ -149,7 +148,7 @@ export const Cart = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        {/* ─── Cart Items List ────────────────────────────────────────── */}
+        
         <div className="lg:col-span-7 space-y-4">
           {cart.map((item) => (
             <div
@@ -174,7 +173,7 @@ export const Cart = () => {
                 </div>
 
                 <div className="flex items-center justify-between mt-4">
-                  {/* Quantity Controls */}
+                  
                   <div className="flex items-center gap-3 bg-stone-50 border border-stone-200 rounded-xl px-3 py-1.5">
                     <button
                       onClick={() => updateQty(item.id, -1)}
@@ -193,7 +192,7 @@ export const Cart = () => {
                     </button>
                   </div>
 
-                  {/* Price & Delete */}
+                  
                   <div className="flex items-center gap-4">
                     <span className="font-extrabold text-emerald-950 text-base">
                       ₹{(item.price * item.qty).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -212,7 +211,7 @@ export const Cart = () => {
           ))}
         </div>
 
-        {/* ─── Order Summary ──────────────────────────────────────────── */}
+        
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-white rounded-3xl p-8 border border-stone-100 whisper-shadow space-y-4">
             <h2 className="font-headline-md text-xl text-primary font-bold border-b border-stone-100 pb-4">
@@ -246,7 +245,7 @@ export const Cart = () => {
             </button>
           </div>
 
-          {/* Trust Badges */}
+          
           <div className="bg-stone-50 rounded-2xl p-6 border border-stone-100 space-y-3">
             <div className="flex items-center gap-3 text-xs text-stone-500 font-medium">
               <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
@@ -265,7 +264,7 @@ export const Cart = () => {
 
       </div>
 
-      {/* ─── Checkout Details Modal ──────────────────────────────────── */}
+      
       {checkoutModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
           <div className="w-full max-w-lg bg-white rounded-[2rem] border border-stone-100 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
@@ -346,7 +345,7 @@ export const Cart = () => {
         </div>
       )}
 
-      {/* Razorpay Modal */}
+      
       <RazorpayModal
         isOpen={razorpayOpen}
         onClose={() => setRazorpayOpen(false)}

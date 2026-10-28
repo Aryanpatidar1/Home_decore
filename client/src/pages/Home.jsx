@@ -46,7 +46,7 @@ export const Home = () => {
   return (
     <div className="space-y-0">
       
-      {/* ─── Hero Section ────────────────────────────────────────────── */}
+      
       <section className="relative min-h-[780px] lg:h-[870px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
@@ -89,7 +89,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ─── Featured Customizable Products ─────────────────────────── */}
+      
       <section id="products" className="py-24 max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
           <div>
@@ -185,7 +185,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ─── Shop By Room ────────────────────────────────────────────── */}
+      
       <section className="py-24 bg-stone-50 dark:bg-stone-900/40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center mb-16">
@@ -226,7 +226,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ─── Decor Styles ────────────────────────────────────────────── */}
+      
       <section className="py-24 max-w-7xl mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 mb-3 rounded-full bg-emerald-500/10 text-emerald-800 text-[11px] font-bold uppercase tracking-widest">
@@ -266,7 +266,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ─── How It Works ────────────────────────────────────────────── */}
+      
       <section className="py-24 bg-emerald-950 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
           <span className="inline-block px-3 py-1 mb-4 rounded-full bg-white/10 text-emerald-300 text-[11px] font-bold uppercase tracking-widest">
@@ -310,7 +310,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ─── Innovation Highlights ──────────────────────────────────── */}
+      
       <section className="py-24 bg-surface-container-low overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center mb-20">
@@ -380,7 +380,7 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* ─── Quiz Prompt CTA ────────────────────────────────────────── */}
+      
       <section className="py-24 max-w-7xl mx-auto px-6 md:px-12">
         <div className="bg-primary p-10 md:p-16 rounded-[2.5rem] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="relative z-10 max-w-xl text-center md:text-left">

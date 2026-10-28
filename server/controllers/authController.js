@@ -42,7 +42,6 @@ export const register = async (req, res, next) => {
       return res.status(409).json({ message: `An account with this ${duplicateField} already exists.` });
     }
 
-    // Set first registered user or specific email as admin for management convenience
     const isFirstUser = (await User.countDocuments({})) === 0;
     const role = isFirstUser ? 'admin' : 'customer';
 

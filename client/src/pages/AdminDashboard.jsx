@@ -4,12 +4,11 @@ import { useToast } from '../context/ToastContext';
 import api from '../services/api';
 
 export const AdminDashboard = () => {
-  const [tab, setTab] = useState('orders'); // 'orders' or 'products'
+  const [tab, setTab] = useState('orders');
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // New product form
   const [showAddModal, setShowAddModal] = useState(false);
   const [newProdName, setNewProdName] = useState('');
   const [newProdCategory, setNewProdCategory] = useState('Wall Decor');
@@ -100,7 +99,7 @@ export const AdminDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 min-h-screen">
       
-      {/* ─── Header ──────────────────────────────────────────────────── */}
+      
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 mb-2 rounded-full bg-amber-500/15 text-amber-800 text-[11px] font-bold uppercase tracking-widest border border-amber-300">
@@ -124,7 +123,7 @@ export const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ─── Metric Cards ────────────────────────────────────────────── */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
         <div className="bg-white p-6 rounded-3xl border border-stone-100 whisper-shadow">
           <p className="text-[11px] uppercase tracking-widest font-semibold text-stone-400">Total Revenue</p>
@@ -155,7 +154,7 @@ export const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ─── Tabs ────────────────────────────────────────────────────── */}
+      
       <div className="flex border-b border-stone-200 mb-6 gap-6">
         <button
           onClick={() => setTab('orders')}
@@ -179,7 +178,7 @@ export const AdminDashboard = () => {
         </button>
       </div>
 
-      {/* ─── Orders Table ────────────────────────────────────────────── */}
+      
       {tab === 'orders' && (
         <div className="bg-white rounded-3xl border border-stone-100 whisper-shadow overflow-hidden">
           <div className="overflow-x-auto">
@@ -237,7 +236,7 @@ export const AdminDashboard = () => {
         </div>
       )}
 
-      {/* ─── Products Table ──────────────────────────────────────────── */}
+      
       {tab === 'products' && (
         <div className="bg-white rounded-3xl border border-stone-100 whisper-shadow overflow-hidden">
           <div className="overflow-x-auto">
@@ -285,7 +284,7 @@ export const AdminDashboard = () => {
         </div>
       )}
 
-      {/* ─── Add Product Modal ───────────────────────────────────────── */}
+      
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
           <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-4">

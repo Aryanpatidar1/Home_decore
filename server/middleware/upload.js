@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Vercel has a read-only filesystem except /tmp
 const uploadDir = process.env.NODE_ENV === 'production'
   ? '/tmp/uploads'
   : path.join(__dirname, '..', 'uploads');
@@ -39,6 +38,6 @@ const fileFilter = (req, file, cb) => {
 
 export const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter
 });

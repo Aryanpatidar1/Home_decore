@@ -32,7 +32,7 @@ export const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           
-          {/* Protected Customer Routes */}
+          
           <Route
             path="dashboard"
             element={
@@ -42,7 +42,7 @@ export const App = () => {
             }
           />
 
-          {/* Protected Admin Routes */}
+          
           <Route
             path="admin"
             element={
@@ -52,7 +52,7 @@ export const App = () => {
             }
           />
 
-          {/* Catch-all redirect */}
+          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

@@ -10,7 +10,6 @@ export const generateArtSpec = async (req, res) => {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // High quality fallback specs
     const fallbacks = {
       bohemian: {
         gradient_start: '#fdfc47',
@@ -70,7 +69,6 @@ export const generateArtSpec = async (req, res) => {
 
     let resultSpec = { ...selectedSpec };
 
-    // Try Gemini API if key is present
     if (apiKey) {
       try {
         const systemInstruction = "You are a professional abstract graphic design engine for luxury canvas prints. You generate design specs in valid JSON format ONLY. Do not wrap JSON in Markdown code block quotes (e.g. do not use ```json). Response must start and end with curly brackets. IMPORTANT: Be highly creative, dynamic, and unpredictable with your color palettes, shape selections, and layout placements. Never output the same design twice.";
@@ -356,7 +354,6 @@ export const recommend = async (req, res) => {
       return res.json(response.data);
     }
   } catch (e) {
-    //
   }
 
   res.json(fallback);

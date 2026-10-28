@@ -10,7 +10,6 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 export const seedProductsData = [
-  // ─── Wall Decor ───────────────────────────────────────────────
   {
     name: 'Custom Canvas Wall Art',
     description: 'AI-generated personalized canvas print with your chosen palette, quote, and abstract composition. Printed on premium 400gsm cotton rag.',
@@ -48,7 +47,6 @@ export const seedProductsData = [
     stock: 60
   },
 
-  // ─── Lighting ─────────────────────────────────────────────────
   {
     name: 'Artisan Table Lamp',
     description: 'Sculpted ceramic base with a linen drum shade. Available in 6 glaze colors to match your room palette. Warm 2700K Edison bulb included.',
@@ -77,7 +75,6 @@ export const seedProductsData = [
     stock: 100
   },
 
-  // ─── Soft Furnishings ─────────────────────────────────────────
   {
     name: 'Personalized Throw Pillow',
     description: 'Custom monogram or quote embroidered on 100% organic Belgian linen. Stone-washed for a lived-in luxury feel. 45 × 45 cm.',
@@ -106,7 +103,6 @@ export const seedProductsData = [
     stock: 35
   },
 
-  // ─── Decorative Accents ───────────────────────────────────────
   {
     name: 'Ceramic Bud Vase Set (3)',
     description: 'A trio of hand-thrown stoneware vases in graduated heights. Each set is unique — glazed in earthy matte finishes that complement any palette.',
@@ -135,7 +131,6 @@ export const seedProductsData = [
     stock: 45
   },
 
-  // ─── Rugs & Mats ──────────────────────────────────────────────
   {
     name: 'Natural Jute Area Rug',
     description: 'Hand-braided jute rug with a dense, durable weave. Earthy, natural texture grounds any room. Custom sizes from 3×5 to 8×10 ft.',
@@ -155,7 +150,6 @@ export const seedProductsData = [
     stock: 22
   },
 
-  // ─── New arrivals ─────────────────────────────────────────────
   {
     name: 'Walnut Gallery Frame Set',
     description: 'A coordinated set of three walnut-finish frames for a personal gallery wall. Includes a balanced mix of portrait and landscape sizes.',
@@ -337,7 +331,6 @@ export const seedUsers = async () => {
   }
 };
 
-// Called automatically on server start: fills an empty database so the shop is never blank.
 export const seedIfEmpty = async () => {
   const result = await Product.bulkWrite(
     seedProductsData.map((product) => ({
@@ -355,7 +348,6 @@ export const seedIfEmpty = async () => {
   await seedUsers();
 };
 
-// Only run as a CLI script: `npm run seed`
 const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === __filename;
 if (isDirectRun) {
   (async () => {

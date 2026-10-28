@@ -117,7 +117,7 @@ export const Products = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
       
-      {/* ─── Catalog Header ─────────────────────────────────────────── */}
+      
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
         <div>
           <span className="inline-block px-3 py-1 mb-3 rounded-full bg-emerald-500/10 text-emerald-800 text-[11px] font-bold uppercase tracking-widest">
@@ -131,7 +131,7 @@ export const Products = () => {
           </p>
         </div>
 
-        {/* Category Pills */}
+        
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
             <button
@@ -149,7 +149,7 @@ export const Products = () => {
         </div>
       </div>
 
-      {/* ─── Search & Sort Bar ───────────────────────────────────────── */}
+      
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-stone-50 p-4 rounded-2xl border border-stone-200/70">
         <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-80">
           <input
@@ -177,7 +177,7 @@ export const Products = () => {
         </div>
       </div>
 
-      {/* ─── Active Filter Notification Banner ──────────────────────── */}
+      
       {(activeRoom || activeStyle || activeCategory !== 'all') && (
         <div className="mb-8 flex items-center gap-3 px-5 py-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
           <Filter className="w-4 h-4 text-emerald-800" />
@@ -195,7 +195,7 @@ export const Products = () => {
         </div>
       )}
 
-      {/* ─── Product Grid ───────────────────────────────────────────── */}
+      
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -229,7 +229,7 @@ export const Products = () => {
                 key={prodId}
                 className="group relative bg-white dark:bg-stone-950 rounded-[2rem] overflow-hidden whisper-shadow border border-stone-100 dark:border-stone-900 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
               >
-                {/* Thumbnail */}
+                
                 <div className="aspect-[4/3] overflow-hidden bg-stone-100 relative shrink-0">
                   <span className="absolute top-4 left-4 z-10 px-3 py-1 bg-white/95 text-stone-800 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
                     {product.category || 'Home Décor'}
@@ -241,7 +241,7 @@ export const Products = () => {
                   />
                 </div>
 
-                {/* Details */}
+                
                 <div className="p-6 flex flex-col flex-1 justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-2 gap-2">
@@ -260,7 +260,7 @@ export const Products = () => {
                     </p>
                   </div>
 
-                  {/* Actions */}
+                  
                   <div className="space-y-2 mt-auto">
                     <div className="grid grid-cols-2 gap-2">
                       <button
@@ -296,7 +296,7 @@ export const Products = () => {
         </div>
       )}
 
-      {/* Quick View Modal */}
+      
       <QuickViewModal
         product={quickViewProduct}
         isOpen={!!quickViewProduct}

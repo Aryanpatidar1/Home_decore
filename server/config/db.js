@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { seedIfEmpty } from '../utils/seedDatabase.js';
 
-// Serverless-safe cached connection (avoids new connection on every Vercel invocation)
 let cached = global.mongooseCache || { conn: null, promise: null, seeded: false };
 global.mongooseCache = cached;
 
@@ -30,7 +29,7 @@ export const connectDB = async () => {
       .connect(uri, {
         serverSelectionTimeoutMS: 15000,
         socketTimeoutMS: 45000,
-        family: 4 // force IPv4: fixes many Atlas connection timeouts on Windows/ISP networks
+        family: 4
       })
       .then(async (m) => {
         console.log(`[MongoDB] Connected: ${m.connection.host}/${m.connection.name}`);
