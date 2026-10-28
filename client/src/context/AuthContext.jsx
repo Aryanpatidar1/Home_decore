@@ -57,9 +57,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, phone, password, phoneIdToken) => {
+  const register = async (name, email, phone, password) => {
     try {
-      const res = await api.post('/auth/register', { name, email, phone, password, phoneIdToken });
+      const res = await api.post('/auth/register', { name, email, phone, password });
       const { token: receivedToken, user: receivedUser } = res.data;
 
       setToken(receivedToken);
@@ -71,25 +71,6 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       const msg = error.response?.data?.message || 'Registration failed. Please try again.';
-      addToast(msg, 'error');
-      return { success: false, message: msg };
-    }
-  };
-
-  const loginWithPhoneToken = async (phoneIdToken) => {
-    try {
-      const res = await api.post('/auth/phone-login', { phoneIdToken });
-      const { token: receivedToken, user: receivedUser } = res.data;
-
-      setToken(receivedToken);
-      setUser(receivedUser);
-      localStorage.setItem('aura_token', receivedToken);
-      localStorage.setItem('aura_user', JSON.stringify(receivedUser));
-
-      addToast(`Welcome back, ${receivedUser.name}!`, 'success');
-      return { success: true };
-    } catch (error) {
-      const msg = error.response?.data?.message || 'Phone verification failed. Please try again.';
       addToast(msg, 'error');
       return { success: false, message: msg };
     }
@@ -127,7 +108,6 @@ export const AuthProvider = ({ children }) => {
         isAdmin: user?.role === 'admin',
         login,
         register,
-        loginWithPhoneToken,
         logout,
         updateProfile
       }}

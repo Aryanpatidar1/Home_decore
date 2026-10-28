@@ -4,9 +4,6 @@
   "description": "HomeDecor (Aura Decor) MERN Backend Server",
   "main": "server.js",
   "type": "module",
-  "engines": {
-    "node": "22.x"
-  },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
@@ -19,7 +16,6 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
-    "firebase-admin": "^14.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
     "multer": "^1.4.5-lts.1"
