@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
+import { getFirebaseAdminAuth, isFirebaseAdminConfigured } from '../config/firebaseAdmin.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'aura_decor_jwt_secret_dev_key_2026_xyz', {
@@ -13,11 +14,49 @@ const phoneLookupPattern = (digits) => new RegExp(
   `^\\+?${digits.split('').join('[\\s().-]*')}$`
 );
 
+const verifyPhoneIdToken = async (idToken) => {
+  let firebaseAuth;
+  try {
+    firebaseAuth = getFirebaseAdminAuth();
+  } catch {
+    return { error: { status: 503, message: 'Phone OTP service is misconfigured on the server.' } };
+  }
+  if (!firebaseAuth) {
+    return { error: { status: 503, message: 'Phone OTP is not configured on the server yet.' } };
+  }
+
+  try {
+    const decodedToken = await firebaseAuth.verifyIdToken(idToken, true);
+    if (!decodedToken.phone_number) {
+      return { error: { status: 401, message: 'The verified Firebase account has no phone number.' } };
+    }
+    return { phone: decodedToken.phone_number };
+  } catch {
+    return { error: { status: 401, message: 'The phone verification code is invalid or expired. Request a new code.' } };
+  }
+};
+
+const issueSession = (res, user, status = 200) => {
+  const token = generateToken(user._id);
+  return res.status(status).json({
+    success: true,
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      addresses: user.addresses
+    }
+  });
+};
+
 export const register = async (req, res, next) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, phoneIdToken } = req.body;
 
-    if (!name || !email || !phone || !password) {
+    if (!name || !email || !phone || !password || !phoneIdToken) {
       return res.status(422).json({ message: 'Name, email, phone number, and password are required.' });
     }
 
@@ -29,6 +68,17 @@ export const register = async (req, res, next) => {
     const normalizedPhone = normalizePhone(phone);
     if (normalizedPhone.length < 7 || normalizedPhone.length > 15) {
       return res.status(422).json({ message: 'Enter a valid phone number with 7 to 15 digits.' });
+    }
+    if (!isFirebaseAdminConfigured()) {
+      return res.status(503).json({ message: 'Phone OTP is not configured on the server yet.' });
+    }
+
+    const phoneVerification = await verifyPhoneIdToken(phoneIdToken);
+    if (phoneVerification.error) {
+      return res.status(phoneVerification.error.status).json({ message: phoneVerification.error.message });
+    }
+    if (normalizePhone(phoneVerification.phone) !== normalizedPhone) {
+      return res.status(403).json({ message: 'Verify the same phone number entered for this account.' });
     }
 
     const existingUser = await User.findOne({
@@ -54,19 +104,7 @@ export const register = async (req, res, next) => {
       role
     });
 
-    const token = generateToken(user._id);
-
-    res.status(201).json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role
-      }
-    });
+    return issueSession(res, user, 201);
   } catch (error) {
     next(error);
   }
@@ -122,6 +160,33 @@ export const login = async (req, res, next) => {
   }
 };
 
+export const loginWithPhoneOtp = async (req, res, next) => {
+  try {
+    const { phoneIdToken } = req.body;
+    if (!phoneIdToken) {
+      return res.status(422).json({ message: 'Complete phone verification first.' });
+    }
+    if (!isFirebaseAdminConfigured()) {
+      return res.status(503).json({ message: 'Phone OTP is not configured on the server yet.' });
+    }
+
+    const phoneVerification = await verifyPhoneIdToken(phoneIdToken);
+    if (phoneVerification.error) {
+      return res.status(phoneVerification.error.status).json({ message: phoneVerification.error.message });
+    }
+
+    const normalizedPhone = normalizePhone(phoneVerification.phone);
+    const user = await User.findOne({ phone: { $regex: phoneLookupPattern(normalizedPhone) } });
+    if (!user) {
+      return res.status(404).json({ message: 'No account is registered with this phone number. Sign up first.' });
+    }
+
+    return issueSession(res, user);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const logout = async (req, res) => {
   res.json({ success: true, message: 'Logged out successfully.' });
 };
@@ -147,13 +212,20 @@ export const updateProfile = async (req, res, next) => {
 
     if (req.body.name) user.name = req.body.name.trim();
     if (req.body.phone !== undefined) {
-      if (!String(req.body.phone).trim()) {
-        user.phone = undefined;
-      } else {
-        const normalizedPhone = normalizePhone(req.body.phone);
-        if (normalizedPhone.length < 7 || normalizedPhone.length > 15) {
-          return res.status(422).json({ message: 'Enter a valid phone number with 7 to 15 digits.' });
+      const normalizedPhone = normalizePhone(req.body.phone);
+      if (normalizedPhone.length < 7 || normalizedPhone.length > 15) {
+        return res.status(422).json({ message: 'Enter a valid phone number with 7 to 15 digits.' });
+      }
+
+      if (normalizedPhone !== normalizePhone(user.phone)) {
+        const phoneVerification = await verifyPhoneIdToken(req.body.phoneIdToken);
+        if (phoneVerification.error) {
+          return res.status(phoneVerification.error.status).json({ message: phoneVerification.error.message });
         }
+        if (normalizePhone(phoneVerification.phone) !== normalizedPhone) {
+          return res.status(403).json({ message: 'Verify the same phone number entered for your profile.' });
+        }
+
         const existingUser = await User.findOne({
           _id: { $ne: user._id },
           phone: { $regex: phoneLookupPattern(normalizedPhone) }
@@ -161,8 +233,8 @@ export const updateProfile = async (req, res, next) => {
         if (existingUser) {
           return res.status(409).json({ message: 'An account with this phone number already exists.' });
         }
-        user.phone = normalizedPhone;
       }
+      user.phone = normalizedPhone;
     }
     if (req.body.addresses) user.addresses = req.body.addresses;
 

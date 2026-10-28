@@ -16,7 +16,7 @@ A luxury home décor e-commerce application with real-time interactive canvas vi
 - **Canvas Rendering**: Native HTML5 Canvas 2D Engine
 
 ### Backend
-- **Runtime**: Node.js v20+
+- **Runtime**: Node.js v22+
 - **Server Framework**: Express.js (REST APIs)
 - **Database**: MongoDB via Mongoose ODM
 - **Authentication**: JWT (JSON Web Tokens) with 7-day expiration
@@ -116,7 +116,7 @@ HomeDecor-MERN/
 
 ## 3. Prerequisites
 
-- **Node.js**: v18.0.0 or higher (v24 recommended)
+- **Node.js**: v22.x or higher
 - **npm**: v9.0.0 or higher
 - **MongoDB**: Local MongoDB instance running on `localhost:27017` or a MongoDB Atlas connection URI
 
@@ -150,9 +150,10 @@ npm run seed
   - Password: `password123`
   - Role: `customer` (Has populated portfolio and saved addresses)
 
-New accounts require an email address and phone number; users can sign in with
-either identifier. Existing email-only accounts can continue signing in by email
-and add a phone number to their profile before using phone sign-in.
+New accounts require an email address and a verified phone number. Users can
+sign in with email/password or use phone OTP. Existing email-only accounts can
+continue signing in by email/password; phone OTP is available for accounts with
+a registered phone number.
 
 ---
 
@@ -229,6 +230,33 @@ when the API is served from the same domain. Since these Vercel projects are
 separate, configure `VITE_API_URL` before deploying the frontend. Keep real
 credentials in Vercel environment settings or local `.env` files; never put them
 in `.env.example` or commit them.
+
+#### Firebase phone OTP setup
+
+Phone OTP requires Firebase Authentication in addition to the existing MongoDB
+database:
+
+1. Create or select a Firebase project, add a **Web app**, and enable
+   **Authentication → Sign-in method → Phone**.
+2. In Firebase Authentication settings, add the deployed frontend domain
+   (for example `home-decore-ten.vercel.app`) and `localhost` to authorized
+   domains. Configure the allowed SMS regions for your users.
+3. Copy the Web app config values into the frontend Vercel project's Production
+   environment: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`,
+   `VITE_FIREBASE_PROJECT_ID`, and `VITE_FIREBASE_APP_ID`. These are Firebase
+   web-app identifiers, not service-account credentials.
+4. Create a Firebase service account from **Project settings → Service accounts**
+   and add its complete JSON as the secret environment variable
+   `FIREBASE_SERVICE_ACCOUNT_JSON` in the backend Vercel project. Keep this
+   private key server-side; never add it to the client or commit it.
+5. Redeploy both projects after saving their variables.
+
+The login screen sends an SMS code for phone numbers in international format
+(for example `+919876543210`), then exchanges the Firebase-verified phone token
+for the app's normal session. Email/password login remains available. Signup
+requires phone verification too. Firebase test phone numbers can be used during
+development without sending real SMS; live SMS availability and quotas depend
+on the Firebase project and region.
 
 ---
 
