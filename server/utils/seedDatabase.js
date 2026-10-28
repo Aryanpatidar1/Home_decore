@@ -153,6 +153,143 @@ export const seedProductsData = [
     image_path: 'https://images.unsplash.com/photo-1589834390005-5d4fb9bf3d32?auto=format&fit=crop&w=700&q=80',
     is_active: true,
     stock: 22
+  },
+
+  // ─── New arrivals ─────────────────────────────────────────────
+  {
+    name: 'Walnut Gallery Frame Set',
+    description: 'A coordinated set of three walnut-finish frames for a personal gallery wall. Includes a balanced mix of portrait and landscape sizes.',
+    category: 'Wall Decor',
+    base_price: 3299.00,
+    image_path: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 28
+  },
+  {
+    name: 'Sculpted Sunburst Wall Mirror',
+    description: 'A softly rounded statement mirror with a warm, sculptural silhouette for entryways and living spaces.',
+    category: 'Wall Decor',
+    base_price: 4299.00,
+    image_path: 'https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 18
+  },
+  {
+    name: 'Textured Neutral Wall Panel',
+    description: 'Layered tactile wall art in calming sand and ivory tones. A refined focal point for minimal and Japandi interiors.',
+    category: 'Wall Decor',
+    base_price: 2899.00,
+    image_path: 'https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 24
+  },
+  {
+    name: 'Aster Glass Globe Pendant',
+    description: 'A clear glass globe pendant with a warm metal detail, designed to bring soft, ambient light over a dining table or bedside.',
+    category: 'Lighting',
+    base_price: 3799.00,
+    image_path: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 20
+  },
+  {
+    name: 'Noma Tripod Floor Lamp',
+    description: 'A sculptural tripod lamp with a linen shade that creates a cosy reading corner and a gentle evening glow.',
+    category: 'Lighting',
+    base_price: 5999.00,
+    image_path: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 14
+  },
+  {
+    name: 'Brushed Brass Wall Sconce',
+    description: 'A compact, elegant wall light with a brushed brass finish. Ideal beside a bed, hallway mirror, or favourite artwork.',
+    category: 'Lighting',
+    base_price: 2499.00,
+    image_path: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 32
+  },
+  {
+    name: 'Terracotta Velvet Cushion',
+    description: 'A plush velvet cushion in a rich terracotta shade, finished with a subtle piped edge. Includes a soft, supportive insert.',
+    category: 'Soft Furnishings',
+    base_price: 1099.00,
+    image_path: 'https://images.unsplash.com/photo-1615874694520-474822394e73?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 42
+  },
+  {
+    name: 'Oatmeal Linen Lounge Throw',
+    description: 'A breathable linen-blend throw with a relaxed drape and delicate fringed edges, made for sofas and quiet evenings.',
+    category: 'Soft Furnishings',
+    base_price: 2199.00,
+    image_path: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 26
+  },
+  {
+    name: 'Botanical Cushion Cover Pair',
+    description: 'Two soft cotton cushion covers with a subtle botanical pattern to add a fresh, layered accent to your living room.',
+    category: 'Soft Furnishings',
+    base_price: 1399.00,
+    image_path: 'https://images.unsplash.com/photo-1615529162924-f8605388461d?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 38
+  },
+  {
+    name: 'Cloud Stoneware Vase',
+    description: 'A hand-finished stoneware vase with a softly sculptural shape. Looks beautiful with fresh stems or styled on its own.',
+    category: 'Decorative Accents',
+    base_price: 1499.00,
+    image_path: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 30
+  },
+  {
+    name: 'Sculptural Travertine Object',
+    description: 'A tactile stone-look accent with an organic silhouette, designed to bring natural texture to shelves and coffee tables.',
+    category: 'Decorative Accents',
+    base_price: 1899.00,
+    image_path: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 22
+  },
+  {
+    name: 'Olive Glaze Planter Pair',
+    description: 'A pair of ceramic planters in a deep olive glaze, sized for small indoor plants and styled together or separately.',
+    category: 'Decorative Accents',
+    base_price: 1699.00,
+    image_path: 'https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 25
+  },
+  {
+    name: 'Cloud-soft Wool Area Rug',
+    description: 'A generously sized wool-blend rug with a soft, inviting pile and a quiet neutral palette for relaxed living spaces.',
+    category: 'Rugs & Mats',
+    base_price: 7999.00,
+    image_path: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 12
+  },
+  {
+    name: 'Sandstone Flatweave Runner',
+    description: 'A durable low-profile runner with a woven texture and understated sandstone tones for hallways and bedside spaces.',
+    category: 'Rugs & Mats',
+    base_price: 3499.00,
+    image_path: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 16
+  },
+  {
+    name: 'Braided Cotton Round Rug',
+    description: 'A handwoven round cotton rug that adds soft texture to a reading nook, nursery, or the side of a bed.',
+    category: 'Rugs & Mats',
+    base_price: 2799.00,
+    image_path: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=900&q=85',
+    is_active: true,
+    stock: 19
   }
 ];
 
@@ -202,10 +339,18 @@ export const seedUsers = async () => {
 
 // Called automatically on server start: fills an empty database so the shop is never blank.
 export const seedIfEmpty = async () => {
-  const count = await Product.countDocuments({});
-  if (count === 0) {
-    const n = await seedProducts();
-    console.log(`[Seeder] Products collection was empty -> seeded ${n} products.`);
+  const result = await Product.bulkWrite(
+    seedProductsData.map((product) => ({
+      updateOne: {
+        filter: { name: product.name },
+        update: { $setOnInsert: product },
+        upsert: true
+      }
+    })),
+    { ordered: false }
+  );
+  if (result.upsertedCount > 0) {
+    console.log(`[Seeder] Added ${result.upsertedCount} catalog products.`);
   }
   await seedUsers();
 };
